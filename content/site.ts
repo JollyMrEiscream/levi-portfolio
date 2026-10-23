@@ -137,7 +137,7 @@ export const site = {
   },
   /**
    * Track credential. Edit the words here.
-   * The night-road clip is credited in cayenneCredit and CREDITS.md.
+   * The line-art clip fills the viewport and is credited in cayenneCredit and CREDITS.md.
    */
   credential: {
     index: "01",
@@ -158,7 +158,7 @@ export const site = {
     source: "Wikimedia Commons",
     sourceUrl:
       "https://commons.wikimedia.org/wiki/File:Resident_Evil_Requiem_x_Porsche_-_Une_L%C3%A9gende_%C3%89ternelle_-_Trailer.webm",
-    edit: "edited (trimmed, mirrored).",
+    edit: "edited (trimmed, mirrored, converted to line art).",
     disclaimer: "Not affiliated with or endorsed by Porsche or Capcom.",
   },
   featured: {

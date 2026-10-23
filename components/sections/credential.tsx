@@ -6,15 +6,42 @@ import { CayenneCredit } from "@/components/cayenne-credit"
 import { assetPath } from "@/lib/base-path"
 import { gsap } from "@/lib/gsap"
 
-const CLIP = "/media/cayenne/clip.mp4"
-const CLIP_WEBM = "/media/cayenne/clip.webm"
+const PORTRAIT = "/media/cayenne/cayenne-lineart-portrait-1080x1920.mp4"
+const SMALL = "/media/cayenne/cayenne-lineart-720p.mp4"
+const HD_WEBM = "/media/cayenne/cayenne-lineart-1080p.webm"
+const HD_MP4 = "/media/cayenne/cayenne-lineart-1080p.mp4"
 const POSTER = "/media/cayenne/poster.webp"
+
+function sourceKind() {
+  if (window.matchMedia("(max-aspect-ratio: 1/1)").matches) return "portrait"
+  if (window.matchMedia("(max-width: 1023px)").matches) return "small"
+  return "hd"
+}
+
+function mountSources(video: HTMLVideoElement) {
+  const kind = sourceKind()
+  if (video.dataset.kind === kind && video.querySelector("source")) return
+  const time = video.currentTime
+  video.dataset.kind = kind
+  video.querySelectorAll("source").forEach((node) => node.remove())
+  const add = (src: string, type: string, media?: string) => {
+    const source = document.createElement("source")
+    source.src = assetPath(src)
+    source.type = type
+    if (media) source.media = media
+    video.append(source)
+  }
+  add(PORTRAIT, "video/mp4", "(max-aspect-ratio: 1/1)")
+  add(SMALL, "video/mp4", "(max-width: 1023px)")
+  add(HD_WEBM, "video/webm")
+  add(HD_MP4, "video/mp4")
+  video.load()
+  if (time > 0 && Number.isFinite(time)) video.currentTime = time
+}
 
 export function Credential() {
   const sectionRef = useRef<HTMLElement>(null)
-  const stageRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
-  const trailRef = useRef<HTMLDivElement>(null)
   const copyRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -24,47 +51,47 @@ export function Credential() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
 
     const play = () => {
-      if (!video.querySelector("source")) {
-        const webm = document.createElement("source")
-        webm.src = assetPath(CLIP_WEBM)
-        webm.type = "video/webm"
-        const mp4 = document.createElement("source")
-        mp4.src = assetPath(CLIP)
-        mp4.type = "video/mp4"
-        video.append(webm, mp4)
-        video.load()
-      }
+      mountSources(video)
       video.muted = true
       if (video.ended) video.currentTime = 0
       void video.play().catch(() => undefined)
     }
+
+    const portraitQ = window.matchMedia("(max-aspect-ratio: 1/1)")
+    const smallQ = window.matchMedia("(max-width: 1023px)")
+    const onChange = () => {
+      const wasPlaying = !video.paused
+      mountSources(video)
+      if (wasPlaying) void video.play().catch(() => undefined)
+    }
+    portraitQ.addEventListener("change", onChange)
+    smallQ.addEventListener("change", onChange)
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry?.isIntersecting) play()
         else video.pause()
       },
-      { threshold: 0.28 },
+      { threshold: 0.55 },
     )
     observer.observe(section)
-    return () => observer.disconnect()
+    return () => {
+      observer.disconnect()
+      portraitQ.removeEventListener("change", onChange)
+      smallQ.removeEventListener("change", onChange)
+    }
   }, [])
 
   useLayoutEffect(() => {
     const section = sectionRef.current
-    const stage = stageRef.current
-    const trail = trailRef.current
     const copy = copyRef.current
-    if (!section || !stage || !trail || !copy) return
+    if (!section || !copy) return
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
 
     const mm = gsap.matchMedia()
 
     const build = (light: boolean) => {
-      const distance = () => window.innerHeight * (light ? 0.95 : 1.7)
-      const exitX = () => -(window.innerWidth * 0.5 + Math.min(window.innerWidth * 0.92, 1280) * 0.55 + 32)
-      const startScale = light ? 0.92 : 0.7
-
+      const distance = () => window.innerHeight * (light ? 1.05 : 1.4)
       const timeline = gsap.timeline({
         defaults: { ease: "none", force3D: true },
         scrollTrigger: {
@@ -72,37 +99,14 @@ export function Credential() {
           start: "top top",
           end: () => `+=${distance()}`,
           pin: true,
-          scrub: light ? 0.35 : 0.65,
+          scrub: light ? 0.35 : 0.6,
           anticipatePin: 1,
           invalidateOnRefresh: true,
         },
       })
 
-      gsap.set(stage, {
-        xPercent: -50,
-        yPercent: -50,
-        x: 0,
-        y: 0,
-        scale: startScale,
-        rotationZ: 0,
-        opacity: 1,
-        force3D: true,
-      })
-      gsap.set(trail, { xPercent: 55, opacity: 0 })
       gsap.set(copy, { opacity: 0, y: 28 })
-
-      timeline.to(stage, { scale: 1, duration: 0.42 }, 0)
-      timeline.to(stage, { x: exitX, y: light ? -8 : -18, rotationZ: light ? -3 : -6, duration: 0.36 }, 0.42)
-      timeline.fromTo(
-        trail,
-        { xPercent: 28, opacity: 0 },
-        { xPercent: -78, opacity: 1, duration: 0.24, immediateRender: false },
-        0.5,
-      )
-      timeline.to(trail, { opacity: 0, xPercent: -120, duration: 0.12 }, 0.76)
-      timeline.to(stage, { opacity: 0, duration: 0.1 }, 0.74)
-      timeline.to(copy, { opacity: 1, y: 0, duration: 0.16 }, 0.8)
-
+      timeline.to(copy, { opacity: 1, y: 0, duration: 0.24 }, 0.72)
       return timeline
     }
 
@@ -132,31 +136,20 @@ export function Credential() {
       className="credential-section"
       aria-label={`${site.credential.program}, ${site.credential.place}`}
     >
-      <div className="cayenne-pin relative h-dvh overflow-hidden bg-background">
+      <div className="cayenne-pin">
         <div className="cayenne-drive" aria-hidden>
-          <div className="absolute inset-x-0 top-[61%] h-px bg-line" />
-          <div ref={stageRef} className="cayenne-stage">
-            <video
-              ref={videoRef}
-              poster={assetPath(POSTER)}
-              width={1280}
-              height={720}
-              muted
-              playsInline
-              preload="none"
-              className="h-full w-full object-cover"
-            />
-          </div>
-          <div ref={trailRef} className="cayenne-trail" />
+          <video
+            ref={videoRef}
+            poster={assetPath(POSTER)}
+            muted
+            playsInline
+            preload="none"
+            className="cayenne-video"
+          />
         </div>
 
         <div className="cayenne-still">
-          <img
-            src={assetPath(POSTER)}
-            alt="Cayenne on a wet road at night"
-            width={1280}
-            height={720}
-          />
+          <img src={assetPath(POSTER)} alt="Line drawing of a Cayenne on a road at night" width={1920} height={1080} />
         </div>
 
         <div ref={copyRef} className="credential-copy">
@@ -174,9 +167,9 @@ export function Credential() {
             <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">{site.credential.program}</p>
             <p className="mt-3 text-lg text-muted">{site.credential.place}</p>
             <p className="mt-5 max-w-md text-base leading-relaxed text-muted">{site.credential.detail}</p>
-            <CayenneCredit className="cayenne-credit mt-8 max-w-xl text-[11px] leading-relaxed text-faint" />
           </div>
         </div>
+        <CayenneCredit className="cayenne-credit" />
       </div>
     </section>
   )

@@ -1,6 +1,7 @@
 import Link from "next/link"
 import type { Project } from "@/content/site"
 import { ProjectMockup } from "@/components/mockups"
+import { assetPath } from "@/lib/base-path"
 import { cn, pad } from "@/lib/utils"
 
 export function ProjectCard({
@@ -30,7 +31,17 @@ export function ProjectCard({
             {pad(index + 1)}
           </span>
           <div className="h-full w-full transition-transform duration-700 ease-out motion-reduce:transition-none motion-safe:group-hover:scale-[1.04]">
-            <ProjectMockup slug={project.slug} />
+            {project.cover ? (
+              <img
+                src={assetPath(project.cover)}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <ProjectMockup slug={project.slug} />
+            )}
           </div>
         </div>
         <div className="flex items-end justify-between gap-4 pt-5">

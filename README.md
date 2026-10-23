@@ -30,14 +30,14 @@ npm run build
 
 ## Edit the content
 
-Everything visitors read is in [`content/site.ts`](content/site.ts): name, bio, navigation, marquee, the Atlanta track credential, skills, contact, and the four projects.
+Everything visitors read is in [`content/site.ts`](content/site.ts): name, bio, navigation, marquee, the Atlanta track credential, skills, contact, and the seven projects.
 
 - Set `email` and flip `emailIsPlaceholder` to `false` when the address is real.
 - Fill `year`, `liveUrl`, `repoUrl`, and `stack` on each project. Use `null` or an empty stack until you have them.
 - Set `placeholder: false` on a project after you replace the starter paragraphs.
 - Add social links to `socials`. They render in the contact section and the footer.
 - Add tools only after you’re happy putting them on the site. A few ideas are commented near the skills list in that file.
-- Visuals are drawn in [`components/mockups.tsx`](components/mockups.tsx). They are original compositions, not photographs.
+- Visuals without a photo live in [`components/mockups.tsx`](components/mockups.tsx). DancingSRQ media is in `public/media/dancingsrq`. Logos for the studio, Halloween Manhunt, and LockScreenRotator are in `public/media`.
 
 There are no API keys and no `.env` file. Don’t commit secrets.
 
@@ -81,10 +81,10 @@ Anywhere else that can serve static files, run `npm run build` with no base path
 
 ## What’s still Levi’s
 
-The words are a starter draft grounded in the brief, not a finished biography. Before this is public, replace:
+The project write-ups follow the code-verified notes. Still open, if you want them public:
 
-- Live URLs for DancingSRQ, notch-media, Vela, and Clear Web Studio
-- Code links for DancingSRQ, notch-media, and Vela (only add a URL that already exists)
+- A public store link for DancingSRQ, if you want one on the case study
+- Screen recordings for notch-media and Vela. Those pages use drawn frames until then
 - Years, and any stack that isn’t already named (Expo for DancingSRQ, Electron for notch-media)
 - Client names and outcomes for Clear Web Studio, if they should be public
 - A fuller story for Vela

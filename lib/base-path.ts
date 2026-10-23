@@ -9,6 +9,12 @@ export function configuredBasePath() {
   return withSlash.replace(/\/$/, "")
 }
 
+/** Public file URL, including the GitHub Pages base path when the site is built for it. */
+export function assetPath(path: string) {
+  const clean = path.startsWith("/") ? path : `/${path}`
+  return `${configuredBasePath()}${clean}`
+}
+
 /** App Router path, without the GitHub Pages base path or a trailing slash. */
 export function toAppPath(pathname: string) {
   const base = configuredBasePath()

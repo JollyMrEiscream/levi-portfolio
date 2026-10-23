@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { site } from "@/content/site"
+import { CayenneCredit } from "@/components/cayenne-credit"
 
 export function Footer() {
   return (
@@ -10,6 +11,7 @@ export function Footer() {
           <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.18em] text-faint">
             © {site.copyrightYear} · {site.locationShort} · {site.studio}
           </p>
+          <CayenneCredit className="mt-4 max-w-md text-[11px] leading-relaxed text-faint" />
         </div>
         <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted" aria-label="Footer">
           <Link href="/#work" data-transition="Work" className="hover:text-foreground">

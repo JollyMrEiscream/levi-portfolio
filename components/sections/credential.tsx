@@ -1,52 +1,69 @@
 "use client"
 
-import { useLayoutEffect, useRef } from "react"
+import { useEffect, useLayoutEffect, useRef } from "react"
 import { site } from "@/content/site"
-import { CayenneSvg } from "@/components/cayenne-svg"
+import { CayenneCredit } from "@/components/cayenne-credit"
+import { assetPath } from "@/lib/base-path"
 import { gsap } from "@/lib/gsap"
 
-const LINES = [
-  { top: "42%", width: "28%" },
-  { top: "48%", width: "42%" },
-  { top: "54%", width: "18%" },
-  { top: "58%", width: "36%" },
-  { top: "63%", width: "22%" },
-  { top: "68%", width: "46%" },
-  { top: "73%", width: "16%" },
-]
+const CLIP = "/media/cayenne/clip.mp4"
+const CLIP_WEBM = "/media/cayenne/clip.webm"
+const POSTER = "/media/cayenne/poster.webp"
 
 export function Credential() {
   const sectionRef = useRef<HTMLElement>(null)
-  const carRef = useRef<HTMLDivElement>(null)
-  const ghostARef = useRef<HTMLDivElement>(null)
-  const ghostBRef = useRef<HTMLDivElement>(null)
-  const flareRef = useRef<HTMLDivElement>(null)
+  const stageRef = useRef<HTMLDivElement>(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
   const trailRef = useRef<HTMLDivElement>(null)
   const copyRef = useRef<HTMLDivElement>(null)
-  const linesRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const section = sectionRef.current
+    const video = videoRef.current
+    if (!section || !video) return
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+
+    const play = () => {
+      if (!video.querySelector("source")) {
+        const webm = document.createElement("source")
+        webm.src = assetPath(CLIP_WEBM)
+        webm.type = "video/webm"
+        const mp4 = document.createElement("source")
+        mp4.src = assetPath(CLIP)
+        mp4.type = "video/mp4"
+        video.append(webm, mp4)
+        video.load()
+      }
+      video.muted = true
+      if (video.ended) video.currentTime = 0
+      void video.play().catch(() => undefined)
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) play()
+        else video.pause()
+      },
+      { threshold: 0.28 },
+    )
+    observer.observe(section)
+    return () => observer.disconnect()
+  }, [])
 
   useLayoutEffect(() => {
     const section = sectionRef.current
-    const car = carRef.current
-    const ghostA = ghostARef.current
-    const ghostB = ghostBRef.current
-    const flare = flareRef.current
+    const stage = stageRef.current
     const trail = trailRef.current
     const copy = copyRef.current
-    const lines = linesRef.current
-    if (!section || !car || !ghostA || !ghostB || !flare || !trail || !copy || !lines) return
-
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    if (reduce) return
+    if (!section || !stage || !trail || !copy) return
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
 
     const mm = gsap.matchMedia()
 
     const build = (light: boolean) => {
-      const distance = () => window.innerHeight * (light ? 0.95 : 1.85)
-      const exitX = () => -window.innerWidth * (light ? 0.92 : 1.05)
-      const approach = light ? 0.72 : 1.18
-      const pass = light ? 1.28 : 1.42
-      const streaks = [...lines.querySelectorAll<HTMLElement>("[data-streak]")]
+      const distance = () => window.innerHeight * (light ? 0.95 : 1.7)
+      const exitX = () => -(window.innerWidth * 0.5 + Math.min(window.innerWidth * 0.92, 1280) * 0.55 + 32)
+      const startScale = light ? 0.92 : 0.7
 
       const timeline = gsap.timeline({
         defaults: { ease: "none", force3D: true },
@@ -55,62 +72,36 @@ export function Credential() {
           start: "top top",
           end: () => `+=${distance()}`,
           pin: true,
-          scrub: light ? 0.35 : 0.7,
+          scrub: light ? 0.35 : 0.65,
           anticipatePin: 1,
           invalidateOnRefresh: true,
         },
       })
 
-      gsap.set([car, ghostA, ghostB], {
+      gsap.set(stage, {
         xPercent: -50,
         yPercent: -50,
-        transformOrigin: "50% 60%",
+        x: 0,
+        y: 0,
+        scale: startScale,
+        rotationZ: 0,
+        opacity: 1,
         force3D: true,
       })
-      gsap.set(car, { scale: 0.18, y: -36, rotationY: 0, rotationZ: 0, opacity: 1 })
-      gsap.set([ghostA, ghostB], { scale: 0.18, y: -36, opacity: 0 })
-      gsap.set(flare, { opacity: 0.05, scale: 0.7 })
       gsap.set(trail, { xPercent: 55, opacity: 0 })
       gsap.set(copy, { opacity: 0, y: 28 })
-      gsap.set(streaks, { opacity: 0, x: 80 })
 
-      timeline.to(car, { scale: approach, y: 18, duration: 0.46 }, 0)
-      timeline.to(ghostA, { scale: approach * 0.96, y: 18, opacity: light ? 0 : 0.16, duration: 0.46 }, 0)
-      timeline.to(ghostB, { scale: approach * 0.92, y: 22, opacity: light ? 0 : 0.08, duration: 0.46 }, 0)
-      timeline.to(flare, { opacity: 0.85, scale: 1, duration: 0.32 }, 0.12)
-      timeline.to(flare, { opacity: 1, scale: 1.35, duration: 0.08 }, 0.4)
-      timeline.to(flare, { opacity: 0.55, scale: 1.05, duration: 0.08 }, 0.48)
-
-      streaks.forEach((streak, index) => {
-        timeline.to(
-          streak,
-          { opacity: light && index > 2 ? 0 : 0.75, x: light ? -160 : -280, duration: 0.4 },
-          0.12 + (index % 3) * 0.02,
-        )
-      })
-
-      timeline.to(
-        car,
-        { x: exitX, y: -20, scale: pass, rotationY: light ? -26 : -42, rotationZ: light ? -4 : -7, duration: 0.34 },
-        0.46,
-      )
-      timeline.to(
-        ghostA,
-        { x: () => exitX() * 0.72, y: 8, scale: pass * 0.94, rotationY: -18, opacity: 0, duration: 0.3 },
-        0.48,
-      )
-      timeline.to(ghostB, { x: () => exitX() * 0.5, opacity: 0, duration: 0.26 }, 0.48)
-      timeline.to(flare, { opacity: 0, duration: 0.14 }, 0.52)
-      timeline.to(streaks, { opacity: 0, x: light ? -220 : -420, duration: 0.24 }, 0.5)
+      timeline.to(stage, { scale: 1, duration: 0.42 }, 0)
+      timeline.to(stage, { x: exitX, y: light ? -8 : -18, rotationZ: light ? -3 : -6, duration: 0.36 }, 0.42)
       timeline.fromTo(
         trail,
         { xPercent: 28, opacity: 0 },
-        { xPercent: -78, opacity: 1, duration: 0.26, immediateRender: false },
+        { xPercent: -78, opacity: 1, duration: 0.24, immediateRender: false },
         0.5,
       )
-      timeline.to(trail, { opacity: 0, xPercent: -120, duration: 0.12 }, 0.78)
+      timeline.to(trail, { opacity: 0, xPercent: -120, duration: 0.12 }, 0.76)
+      timeline.to(stage, { opacity: 0, duration: 0.1 }, 0.74)
       timeline.to(copy, { opacity: 1, y: 0, duration: 0.16 }, 0.8)
-      timeline.to(car, { opacity: 0, duration: 0.1 }, 0.72)
 
       return timeline
     }
@@ -144,32 +135,28 @@ export function Credential() {
       <div className="cayenne-pin relative h-dvh overflow-hidden bg-background">
         <div className="cayenne-drive" aria-hidden>
           <div className="absolute inset-x-0 top-[61%] h-px bg-line" />
-          <div className="absolute top-[61%] left-1/2 h-[34%] w-px origin-top bg-white/15" style={{ transform: "rotate(16deg)" }} />
-          <div className="absolute top-[61%] left-1/2 h-[34%] w-px origin-top bg-white/15" style={{ transform: "rotate(-16deg)" }} />
-          <div ref={linesRef}>
-            {LINES.map((line) => (
-              <span
-                key={`${line.top}-${line.width}`}
-                data-streak
-                className="cayenne-streak"
-                style={{ top: line.top, width: line.width }}
-              />
-            ))}
-          </div>
-          <div ref={ghostBRef} className="cayenne-car cayenne-ghost">
-            <CayenneSvg className="h-full w-full" />
-          </div>
-          <div ref={ghostARef} className="cayenne-car cayenne-ghost">
-            <CayenneSvg className="h-full w-full" />
-          </div>
-          <div ref={carRef} className="cayenne-car">
-            <CayenneSvg className="h-full w-full" />
-            <div ref={flareRef} className="cayenne-flares">
-              <span />
-              <span />
-            </div>
+          <div ref={stageRef} className="cayenne-stage">
+            <video
+              ref={videoRef}
+              poster={assetPath(POSTER)}
+              width={1280}
+              height={720}
+              muted
+              playsInline
+              preload="none"
+              className="h-full w-full object-cover"
+            />
           </div>
           <div ref={trailRef} className="cayenne-trail" />
+        </div>
+
+        <div className="cayenne-still">
+          <img
+            src={assetPath(POSTER)}
+            alt="Cayenne on a wet road at night"
+            width={1280}
+            height={720}
+          />
         </div>
 
         <div ref={copyRef} className="credential-copy">
@@ -183,13 +170,11 @@ export function Credential() {
               </span>
             ))}
           </h2>
-          <div className="mt-10 flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
-            <div className="max-w-xl">
-              <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">{site.credential.program}</p>
-              <p className="mt-3 text-lg text-muted">{site.credential.place}</p>
-              <p className="mt-5 max-w-md text-base leading-relaxed text-muted">{site.credential.detail}</p>
-            </div>
-            <CayenneSvg className="cayenne-mark" />
+          <div className="mt-10 max-w-xl">
+            <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">{site.credential.program}</p>
+            <p className="mt-3 text-lg text-muted">{site.credential.place}</p>
+            <p className="mt-5 max-w-md text-base leading-relaxed text-muted">{site.credential.detail}</p>
+            <CayenneCredit className="cayenne-credit mt-8 max-w-xl text-[11px] leading-relaxed text-faint" />
           </div>
         </div>
       </div>

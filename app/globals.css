@@ -156,50 +156,32 @@ html.js:not(.rm) .hero-char {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  perspective: 1200px;
 }
 
-.cayenne-car {
+.cayenne-stage {
   position: absolute;
-  top: 58%;
+  top: 48%;
   left: 50%;
   z-index: 3;
-  width: min(78vw, 40rem);
+  width: min(92vw, 1280px);
+  max-width: 1280px;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #070605;
   transform-origin: 50% 60%;
   will-change: transform, opacity;
 }
 
-.cayenne-ghost {
-  z-index: 2;
-  opacity: 0;
-}
-
-.cayenne-flares {
-  position: absolute;
-  inset: 42% 10% auto;
-  display: flex;
-  justify-content: space-between;
-  opacity: 0;
-  will-change: transform, opacity;
-  pointer-events: none;
-}
-
-.cayenne-flares span {
+.cayenne-stage video {
   display: block;
-  width: 34%;
-  height: 4.5rem;
-  border-radius: 999px;
-  background: radial-gradient(circle, rgba(255, 246, 234, 0.95) 0%, rgba(255, 59, 26, 0.72) 32%, transparent 70%);
-  mix-blend-mode: screen;
+  width: 100%;
+  height: 100%;
+  max-width: 1280px;
+  object-fit: cover;
 }
 
-.cayenne-streak {
-  position: absolute;
-  left: 58%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(243, 240, 232, 0.85), transparent);
-  opacity: 0;
-  will-change: transform, opacity;
+.cayenne-still {
+  display: none;
 }
 
 .cayenne-trail {
@@ -232,11 +214,6 @@ html.js:not(.rm) .credential-copy {
   opacity: 0;
 }
 
-.cayenne-mark {
-  width: min(42vw, 11rem);
-  align-self: flex-end;
-}
-
 @media (min-width: 768px) {
   .credential-copy {
     padding-right: max(2.5rem, env(safe-area-inset-right));
@@ -245,24 +222,26 @@ html.js:not(.rm) .credential-copy {
   }
 }
 
-@media (max-width: 1023px) {
-  .cayenne-car {
-    width: min(92vw, 28rem);
-  }
-
-  .cayenne-ghost,
-  .cayenne-streak:nth-child(n + 4) {
-    display: none;
-  }
-
-  .cayenne-flares span {
-    height: 2.6rem;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .cayenne-drive {
     display: none;
+  }
+
+  .cayenne-still {
+    display: block;
+    width: min(calc(100% - 2.5rem), 1280px);
+    max-width: 1280px;
+    margin: 6.5rem auto 0;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+  }
+
+  .cayenne-still img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: 1280px;
+    object-fit: cover;
   }
 
   .cayenne-pin {
@@ -273,7 +252,7 @@ html.js:not(.rm) .credential-copy {
   .credential-copy {
     position: relative;
     opacity: 1;
-    padding-top: 7rem;
+    padding-top: 2.5rem;
     padding-bottom: 5rem;
     animation: credential-fade 0.45s ease both;
   }

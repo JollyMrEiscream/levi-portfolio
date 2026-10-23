@@ -4,6 +4,7 @@ import { ProjectMockup } from "@/components/mockups"
 import { PhonePreviews } from "@/components/phone-previews"
 import { ShotGallery } from "@/components/shot-gallery"
 import { ScaleFrame } from "@/components/scale-frame"
+import { PhoneSlot } from "@/components/phone-slot"
 import { LineReveal } from "@/components/text-reveal"
 import { assetPath } from "@/lib/base-path"
 import { pad } from "@/lib/utils"
@@ -36,8 +37,19 @@ export function ProjectView({
 
       <div className="px-safe">
         <div className="mt-12 flex items-center gap-4">
-          {project.mark ? (
-            <img src={assetPath(project.mark)} alt="" className="h-11 w-11 object-contain" />
+          {project.mark?.src ? (
+            <img
+              src={assetPath(project.mark.src)}
+              alt=""
+              width={project.mark.width}
+              height={project.mark.height}
+              style={{
+                aspectRatio: `${project.mark.width} / ${project.mark.height}`,
+                maxWidth: project.mark.width,
+                maxHeight: project.mark.height,
+              }}
+              className="h-11 w-auto object-contain"
+            />
           ) : null}
           <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent">{project.eyebrow}</p>
         </div>
@@ -169,14 +181,20 @@ function TierGrid({ tiers }: { tiers: ProjectTier[] }) {
       <div className="mt-8 grid gap-8 lg:grid-cols-3">
         {tiers.map((tier) => (
           <article key={tier.name} className="border border-line bg-surface">
-            {tier.image ? (
-              <img
-                src={assetPath(tier.image)}
-                alt={`${tier.name} membership screen`}
-                loading="lazy"
-                decoding="async"
-                className="aspect-[9/16] w-full object-cover object-top"
-              />
+            {tier.image && tier.imageWidth && tier.imageHeight ? (
+              <div className="flex justify-center px-6 pt-8">
+                <PhoneSlot
+                  src={tier.image}
+                  srcSmall={tier.imageSmall}
+                  smallWidth={tier.imageSmallWidth}
+                  sizes="260px"
+                  width={tier.imageWidth}
+                  height={tier.imageHeight}
+                  alt={`${tier.name} membership screen`}
+                  maxCssWidth={260}
+                  fit="fill"
+                />
+              </div>
             ) : null}
             <div className="p-5">
               <h2 className="text-2xl tracking-[-0.03em]">{tier.name}</h2>

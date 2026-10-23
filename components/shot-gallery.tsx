@@ -2,7 +2,7 @@
 
 import { useLayoutEffect, useRef } from "react"
 import type { ProjectShot } from "@/content/site"
-import { assetPath } from "@/lib/base-path"
+import { PhoneSlot } from "@/components/phone-slot"
 import { gsap, ScrollTrigger } from "@/lib/gsap"
 
 export function ShotGallery({ shots }: { shots: ProjectShot[] }) {
@@ -55,13 +55,19 @@ export function ShotGallery({ shots }: { shots: ProjectShot[] }) {
         <div className="mt-6 overflow-x-auto lg:mt-0 lg:overflow-hidden">
           <div ref={trackRef} className="flex w-max gap-5 px-safe pb-4 snap-x snap-mandatory lg:snap-none lg:pb-0">
             {shots.map((shot) => (
-              <img
-                key={shot.src}
-                src={assetPath(shot.src)}
+              <PhoneSlot
+                key={shot.src ?? shot.label}
+                src={shot.src}
+                srcSmall={shot.srcSmall}
+                smallWidth={shot.smallWidth}
+                sizes="270px"
+                width={shot.width}
+                height={shot.height}
                 alt={shot.alt}
-                loading="lazy"
-                decoding="async"
-                className="h-[min(68dvh,34rem)] w-auto max-w-[85vw] shrink-0 snap-center border border-line bg-surface object-contain"
+                label={shot.label}
+                maxCssWidth={270}
+                maxCssHeight="min(62dvh, 30rem)"
+                className="shrink-0 snap-center"
               />
             ))}
           </div>

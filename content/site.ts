@@ -15,18 +15,49 @@ export type ProjectTier = {
   price: string
   detail: string
   image?: string
+  imageWidth?: number
+  imageHeight?: number
+  imageSmall?: string
+  imageSmallWidth?: number
+  imageSmallHeight?: number
 }
 
 export type ProjectVideo = {
-  src: string
-  poster: string
   label: string
+  /** Pixel size of the clip. 1179×2556 until a file says otherwise. */
+  width: number
+  height: number
+  /** Set when the MP4 is in public/. */
+  src?: string
+  poster?: string
+  posterWidth?: number
+  posterHeight?: number
 }
 
 export type ProjectShot = {
-  src: string
+  label: string
   alt: string
+  /** Full capture pixel size. The slot must not paint larger than this. */
+  width: number
+  height: number
+  src?: string
+  srcSmall?: string
+  smallWidth?: number
+  smallHeight?: number
 }
+
+export type Raster = {
+  width: number
+  height: number
+  src?: string
+  srcSmall?: string
+  smallWidth?: number
+  smallHeight?: number
+}
+
+/** Full DancingSRQ captures, and the 590-wide WebP used in srcset. */
+export const phoneCapture = { width: 1179, height: 2556 }
+export const phoneCaptureSmall = { width: 590, height: 1279 }
 
 export type Project = {
   slug: string
@@ -43,10 +74,10 @@ export type Project = {
   tiers?: ProjectTier[]
   videos?: ProjectVideo[]
   gallery?: ProjectShot[]
-  /** Card and featured still. Root-relative public path. */
-  cover?: string
+  /** Card and featured still, at its intrinsic pixel size. */
+  cover?: Raster
   /** Small logo shown beside the case-study eyebrow. */
-  mark?: string
+  mark?: Raster
   /** Shown on the case study when the write-up still needs Levi's own story. */
   placeholder: boolean
   /** Short status such as a version or "In progress". */
@@ -106,8 +137,7 @@ export const site = {
   },
   /**
    * Track credential. Edit the words here.
-   * The car mark is an original drawing in components/cayenne-svg.tsx.
-   * Do not swap in the Porsche crest, official photos, or a downloaded model.
+   * The night-road clip is credited in cayenneCredit and CREDITS.md.
    */
   credential: {
     index: "01",
@@ -117,6 +147,19 @@ export const site = {
     place: "Porsche Experience Center Atlanta",
     detail:
       "Levi is certified through the Porsche Young Driver Experience at the Porsche Experience Center Atlanta.",
+  },
+  /** Shown beside the Cayenne clip and again in the footer. */
+  cayenneCredit: {
+    label: "Cayenne footage",
+    work: "Resident Evil Requiem x Porsche",
+    author: "Capcom France",
+    license: "CC BY 3.0",
+    licenseUrl: "https://creativecommons.org/licenses/by/3.0/",
+    source: "Wikimedia Commons",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Resident_Evil_Requiem_x_Porsche_-_Une_L%C3%A9gende_%C3%89ternelle_-_Trailer.webm",
+    edit: "edited (trimmed, mirrored).",
+    disclaimer: "Not affiliated with or endorsed by Porsche or Capcom.",
   },
   featured: {
     kicker: "In focus",
@@ -185,6 +228,24 @@ export const site = {
 }
 
 const dance = "/media/dancingsrq"
+const phoneShot = (file: string, label: string, alt: string): ProjectShot => ({
+  label,
+  alt,
+  src: `${dance}/shots/${file}.webp`,
+  ...phoneCapture,
+  srcSmall: `${dance}/shots/${file}-590.webp`,
+  smallWidth: phoneCaptureSmall.width,
+  smallHeight: phoneCaptureSmall.height,
+})
+
+const phoneTier = (file: string) => ({
+  image: `${dance}/shots/${file}.webp`,
+  imageWidth: phoneCapture.width,
+  imageHeight: phoneCapture.height,
+  imageSmall: `${dance}/shots/${file}-590.webp`,
+  imageSmallWidth: phoneCaptureSmall.width,
+  imageSmallHeight: phoneCaptureSmall.height,
+})
 
 export const projects: Project[] = [
   {
@@ -214,44 +275,50 @@ export const projects: Project[] = [
       "Reanimated 4",
       "Puppeteer",
     ],
-    cover: `${dance}/frames/preview1-8s.jpg`,
-    mark: `${dance}/logo.png`,
+    cover: phoneShot("02-discover-home", "Home", "DancingSRQ home"),
+    mark: { src: `${dance}/logo.png`, width: 200, height: 243 },
     videos: [
       {
-        src: `${dance}/videos/01-discover-home.mp4`,
-        poster: `${dance}/frames/preview1-2s.jpg`,
         label: "Discover and home",
+        src: `${dance}/videos/clip-discover.mp4`,
+        width: 590,
+        height: 1280,
+        poster: `${dance}/videos/clip-discover-poster.webp`,
+        posterWidth: 590,
+        posterHeight: 1280,
       },
       {
-        src: `${dance}/videos/02-explore-classes.mp4`,
-        poster: `${dance}/frames/preview2-2s.jpg`,
         label: "Explore and classes",
+        src: `${dance}/videos/clip-explore.mp4`,
+        width: 590,
+        height: 1280,
+        poster: `${dance}/videos/clip-explore-poster.webp`,
+        posterWidth: 590,
+        posterHeight: 1280,
       },
       {
-        src: `${dance}/videos/03-events-studios.mp4`,
-        poster: `${dance}/frames/preview3-2s.jpg`,
         label: "Events and studios",
+        src: `${dance}/videos/clip-events.mp4`,
+        width: 590,
+        height: 1280,
+        poster: `${dance}/videos/clip-events-poster.webp`,
+        posterWidth: 590,
+        posterHeight: 1280,
       },
     ],
     gallery: [
-      { src: `${dance}/frames/preview1-2s.jpg`, alt: "DancingSRQ App Store preview still, discover and home" },
-      { src: `${dance}/frames/p1-5s.jpg`, alt: "DancingSRQ App Store preview still, home" },
-      { src: `${dance}/frames/preview1-8s.jpg`, alt: "DancingSRQ App Store preview still, home, later in the clip" },
-      { src: `${dance}/frames/preview1-15s.jpg`, alt: "DancingSRQ App Store preview still, home, near the end of the clip" },
-      { src: `${dance}/frames/preview2-2s.jpg`, alt: "DancingSRQ App Store preview still, explore and classes" },
-      { src: `${dance}/frames/preview2-8s.jpg`, alt: "DancingSRQ App Store preview still, explore and classes, mid clip" },
-      { src: `${dance}/frames/preview2-15s.jpg`, alt: "DancingSRQ App Store preview still, explore and classes, late clip" },
-      { src: `${dance}/frames/preview3-2s.jpg`, alt: "DancingSRQ App Store preview still, events and studios" },
-      { src: `${dance}/frames/preview3-8s.jpg`, alt: "DancingSRQ App Store preview still, events and studios, mid clip" },
-      { src: `${dance}/frames/preview3-15s.jpg`, alt: "DancingSRQ App Store preview still, events and studios, late clip" },
-      { src: `${dance}/tablet/01-home.png`, alt: "DancingSRQ Google Play tablet screenshot, home" },
-      { src: `${dance}/tablet/02-events.png`, alt: "DancingSRQ Google Play tablet screenshot, events" },
-      { src: `${dance}/tablet/03-classes.png`, alt: "DancingSRQ Google Play tablet screenshot, classes" },
-      { src: `${dance}/tablet/04-studios.png`, alt: "DancingSRQ Google Play tablet screenshot, studios" },
+      phoneShot("02-discover-home", "Home", "DancingSRQ home, with tonight's events and classes"),
+      phoneShot("03-explore-classes", "Explore", "DancingSRQ explore, searching classes"),
+      phoneShot("07-events-list", "Events", "DancingSRQ events list"),
+      phoneShot("09-event-detail-map", "Event", "DancingSRQ event detail with a map"),
+      phoneShot("05-class-detail", "Class", "DancingSRQ class detail"),
+      phoneShot("11-studio-detail", "Studio", "DancingSRQ studio detail"),
+      phoneShot("13-profile-reminders", "Reminders", "DancingSRQ profile reminder settings"),
+      phoneShot("14-membership-premium", "Premium", "DancingSRQ Premium membership screen"),
     ],
     paragraphs: [
       "DancingSRQ is Sarasota's dance-scene app. It lists salsa, bachata, swing, country, and ballroom events, classes, and studios, and an RSVP is one tap.",
-      "Version 1.0.24 is published by Vividiance LLC. One Expo codebase ships to iOS and Android. The previews on this page are the App Store videos and review stills, plus Google Play tablet screenshots.",
+      "Version 1.0.24 is published by Vividiance LLC. One Expo codebase ships to iOS and Android.",
     ],
     features: [
       {
@@ -321,19 +388,19 @@ export const projects: Project[] = [
         name: "Premium",
         price: "$14.99/mo or $149.99/yr",
         detail: "Post 3 events a month. Paid roles see the full calendar.",
-        image: `${dance}/tiers/com.vividiance.dancingsrq.premium.monthly.png`,
+        ...phoneTier("14-membership-premium"),
       },
       {
         name: "Instructor",
         price: "$29.99/mo or $299.99/yr",
         detail: "Unlimited events and classes.",
-        image: `${dance}/tiers/com.vividiance.dancingsrq.instructor.monthly.png`,
+        ...phoneTier("14b-membership-instructor"),
       },
       {
         name: "Studio",
         price: "$49.99/mo or $499.99/yr",
         detail: "Unlimited events and classes.",
-        image: `${dance}/tiers/com.vividiance.dancingsrq.studio.monthly.png`,
+        ...phoneTier("14c-membership-studio"),
       },
     ],
     challenges: [

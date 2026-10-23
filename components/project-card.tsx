@@ -1,7 +1,7 @@
 import Link from "next/link"
 import type { Project } from "@/content/site"
 import { ProjectMockup } from "@/components/mockups"
-import { assetPath } from "@/lib/base-path"
+import { PhoneSlot } from "@/components/phone-slot"
 import { cn, pad } from "@/lib/utils"
 
 export function ProjectCard({
@@ -30,19 +30,26 @@ export function ProjectCard({
           <span className="absolute left-4 top-4 z-10 font-mono text-[11px] tracking-[0.18em] text-foreground/80">
             {pad(index + 1)}
           </span>
-          <div className="h-full w-full transition-transform duration-700 ease-out motion-reduce:transition-none motion-safe:group-hover:scale-[1.04]">
-            {project.cover ? (
-              <img
-                src={assetPath(project.cover)}
+          {project.cover ? (
+            <div className="flex h-full w-full items-center justify-center p-5" style={{ containerType: "size" }}>
+              <PhoneSlot
+                src={project.cover.src}
+                srcSmall={project.cover.srcSmall}
+                smallWidth={project.cover.smallWidth}
+                sizes="560px"
+                width={project.cover.width}
+                height={project.cover.height}
                 alt=""
-                loading="lazy"
-                decoding="async"
-                className="h-full w-full object-cover"
+                label="Home"
+                maxCssWidth={560}
+                fit="container"
               />
-            ) : (
+            </div>
+          ) : (
+            <div className="h-full w-full transition-transform duration-700 ease-out motion-reduce:transition-none motion-safe:group-hover:scale-[1.04]">
               <ProjectMockup slug={project.slug} />
-            )}
-          </div>
+            </div>
+          )}
         </div>
         <div className="flex items-end justify-between gap-4 pt-5">
           <div>

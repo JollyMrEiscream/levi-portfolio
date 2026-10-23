@@ -143,7 +143,10 @@ function StudioMockup() {
       <img
         src={assetPath("/media/clear-web-studio/logo.svg")}
         alt=""
-        className="absolute bottom-5 left-5 h-12 w-12"
+        width={64}
+        height={64}
+        style={{ maxWidth: 64, maxHeight: 64 }}
+        className="absolute bottom-5 left-5 h-12 w-12 object-contain"
       />
       {frames.map((frame) => (
         <div
@@ -176,7 +179,10 @@ function ManhuntMockup() {
       <img
         src={assetPath("/media/halloween-manhunt/mark.svg")}
         alt=""
-        className="absolute left-1/2 top-1/2 h-14 w-14 -translate-x-1/2 -translate-y-1/2"
+        width={64}
+        height={64}
+        style={{ maxWidth: 64, maxHeight: 64 }}
+        className="absolute left-1/2 top-1/2 h-14 w-14 -translate-x-1/2 -translate-y-1/2 object-contain"
       />
       <p className="absolute bottom-5 left-5 font-mono text-[11px] uppercase tracking-[0.18em] text-white/50">
         Downtown Sarasota
@@ -191,7 +197,14 @@ function LockMockup() {
     <>
       <div className="absolute inset-[10%] flex flex-col border border-white/15 bg-[#101010]">
         <div className="flex items-center gap-3 border-b border-white/10 px-4 py-3">
-          <img src={assetPath("/media/lockscreen-rotator/logo.svg")} alt="" className="h-8 w-10" />
+          <img
+            src={assetPath("/media/lockscreen-rotator/logo.svg")}
+            alt=""
+            width={457}
+            height={318}
+            style={{ maxWidth: 46, maxHeight: 32, aspectRatio: "457 / 318" }}
+            className="h-8 w-auto object-contain"
+          />
           <p className="text-sm text-[#f3f0e8]">LockScreenRotator</p>
         </div>
         <div className="flex gap-4 px-4 pt-3 font-mono text-[10px] uppercase tracking-[0.14em] text-white/40">

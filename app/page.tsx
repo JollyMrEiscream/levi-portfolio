@@ -1,4 +1,5 @@
 import { About } from "@/components/sections/about";
+import { Credential } from "@/components/sections/credential";
 import { Contact } from "@/components/sections/contact";
 import { Featured } from "@/components/sections/featured";
 import { Hero } from "@/components/sections/hero";
@@ -12,6 +13,7 @@ export default function HomePage() {
       <Hero />
       <Marquee />
       <About />
+      <Credential />
       <Featured />
       <Work />
       <Skills />

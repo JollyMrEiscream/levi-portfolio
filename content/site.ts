@@ -72,6 +72,20 @@ export const site = {
       { label: "Next", value: "Language school in Tokyo" },
     ],
   },
+  /**
+   * Track credential. Edit the words here.
+   * The car mark is an original drawing in components/cayenne-svg.tsx.
+   * Do not swap in the Porsche crest, official photos, or a downloaded model.
+   */
+  credential: {
+    index: "01",
+    kicker: "Credential",
+    lines: ["Certified", "on the track", "in Atlanta."],
+    program: "Porsche Young Driver Experience",
+    place: "Porsche Experience Center Atlanta",
+    detail:
+      "Levi is certified through the Porsche Young Driver Experience at the Porsche Experience Center Atlanta.",
+  },
   featured: {
     kicker: "In focus",
     slug: "notch-media",

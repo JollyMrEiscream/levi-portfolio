@@ -30,7 +30,7 @@ npm run build
 
 ## Edit the content
 
-Everything visitors read is in [`content/site.ts`](content/site.ts): name, bio, navigation, marquee, skills, contact, and the four projects.
+Everything visitors read is in [`content/site.ts`](content/site.ts): name, bio, navigation, marquee, the Atlanta track credential, skills, contact, and the four projects.
 
 - Set `email` and flip `emailIsPlaceholder` to `false` when the address is real.
 - Fill `year`, `liveUrl`, `repoUrl`, and `stack` on each project. Use `null` or an empty stack until you have them.

@@ -10,7 +10,7 @@ Personal portfolio for Levi Szantosi — a developer and aspiring game designer 
 - [Lenis](https://github.com/darkroomengineering/lenis) for smooth inertial scrolling on desktop
 - A shadcn-style `Button` (`components/ui/button.tsx`) for actions
 
-Motion is lighter on small screens and on touch devices: no custom cursor, no magnetic pull, native scrolling instead of Lenis, and the project reel stacks vertically instead of pinning. `prefers-reduced-motion` skips the intro, the page wipe, smooth scrolling, and scroll-linked animation. The Cayenne credential then shows its poster instead of playing the clip.
+Motion is lighter on small screens and on touch devices: no custom cursor, no magnetic pull, native scrolling instead of Lenis, and the project reel stacks vertically instead of pinning. `prefers-reduced-motion` skips the intro, the page wipe, smooth scrolling, and scroll-linked animation. The Cayenne credential then shows the front still in a small frame, with no pin and no scrub.
 
 ## Run it
 
@@ -37,7 +37,7 @@ Everything visitors read is in [`content/site.ts`](content/site.ts): name, bio, 
 - Set `placeholder: false` on a project after you replace the starter paragraphs.
 - Add social links to `socials`. They render in the contact section and the footer.
 - Add tools only after you’re happy putting them on the site. A few ideas are commented near the skills list in that file.
-- Visuals without a photo live in [`components/mockups.tsx`](components/mockups.tsx). DancingSRQ stills in `public/media/dancingsrq` are 1179×2556 WebP files with a 590-wide srcset variant. The three preview clips are muted 590×1280 H.264. The Cayenne credential plays the muted full-viewport line-art clip in `public/media/cayenne` once, then loops the front three-quarter still in `public/media/cayenne/front2`. Credit for both is in [`CREDITS.md`](CREDITS.md). Logos for the studio and LockScreenRotator are in `public/media`.
+- Visuals without a photo live in [`components/mockups.tsx`](components/mockups.tsx). DancingSRQ stills in `public/media/dancingsrq` are 1179×2556 WebP files with a 590-wide srcset variant. The three preview clips are muted 590×1280 H.264. The Cayenne credential pins on scroll: the line-art clip in `public/media/cayenne` scrubs with the page, crossfades to the front still in `public/media/cayenne/front2`, then shrinks into a rounded frame that scrolls away with the page. Credit for both is in [`CREDITS.md`](CREDITS.md). Logos for the studio and LockScreenRotator are in `public/media`.
 
 There are no API keys and no `.env` file. Don’t commit secrets.
 

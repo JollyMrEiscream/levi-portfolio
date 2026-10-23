@@ -152,8 +152,30 @@ html.js:not(.rm) .hero-char {
   transform-origin: bottom center;
 }
 
-.credential-section,
-.cayenne-pin,
+.credential-section {
+  position: relative;
+  background: #0b0b0b;
+  --frame-ratio: 16 / 9;
+  --frame-aspect: 1.7778;
+  --src-w: 1920;
+}
+
+.credential-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 6rem max(1.25rem, env(safe-area-inset-left)) 2.5rem max(1.25rem, env(safe-area-inset-right));
+}
+
+.cayenne-slot {
+  position: relative;
+  width: min(70vw, calc(var(--src-w) * 1px), calc((100svh - 28rem) * var(--frame-aspect)));
+  aspect-ratio: var(--frame-ratio);
+  flex: none;
+}
+
+.cayenne-frame,
 .cayenne-drive,
 .cayenne-video,
 .cayenne-still,
@@ -161,22 +183,22 @@ html.js:not(.rm) .hero-char {
   background: #0b0b0b;
 }
 
-.credential-section {
-  width: 100vw;
-  height: 100svh;
-}
-
-.cayenne-pin {
-  position: relative;
-  width: 100%;
-  height: 100%;
+.cayenne-frame {
+  position: absolute;
+  inset: 0;
   overflow: hidden;
+  border-radius: 1.25rem;
+  pointer-events: none;
 }
 
 .cayenne-drive,
 .cayenne-still {
   position: absolute;
   inset: 0;
+}
+
+.cayenne-drive {
+  display: none;
 }
 
 .cayenne-video,
@@ -190,75 +212,103 @@ html.js:not(.rm) .hero-char {
   transform: none;
 }
 
-.cayenne-loop {
-  opacity: 0;
-}
-
-.cayenne-clip,
-.cayenne-loop {
-  transition: opacity 0.4s linear;
-}
-
-.cayenne-pin.is-resting .cayenne-clip {
-  opacity: 0;
-}
-
-.cayenne-pin.is-resting .cayenne-loop {
-  opacity: 1;
-}
-
-.cayenne-still {
-  display: none;
-}
-
-.cayenne-fallback .cayenne-drive {
-  display: none;
-}
-
-.cayenne-fallback .cayenne-still {
-  display: block;
-}
-
 .credential-copy {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 7.5rem max(1.25rem, env(safe-area-inset-left)) 12rem max(1.25rem, env(safe-area-inset-right));
-  background: linear-gradient(to top, rgba(11, 11, 11, 0.88) 0%, rgba(11, 11, 11, 0.46) 34%, transparent 68%);
-  pointer-events: none;
-}
-
-html.js:not(.rm) .credential-copy {
-  opacity: 0;
+  max-width: 36rem;
 }
 
 .cayenne-credit {
-  position: absolute;
-  z-index: 6;
-  right: max(1.25rem, env(safe-area-inset-right));
-  bottom: 0;
-  left: max(1.25rem, env(safe-area-inset-left));
-  max-width: 40rem;
-  padding-bottom: max(0.7rem, env(safe-area-inset-bottom));
+  max-width: 36rem;
   font-size: 11px;
   line-height: 1.45;
   color: var(--faint);
-  text-shadow: 0 1px 10px #0b0b0b;
+}
+
+@media (max-width: 1023px) {
+  .cayenne-credit {
+    font-size: 10px;
+    line-height: 1.35;
+  }
+}
+
+html.js:not(.rm) .credential-section.is-scrub {
+  display: flex;
+  flex-direction: column;
+  height: 100svh;
+}
+
+html.js:not(.rm) .is-scrub .credential-layout {
+  width: 100%;
+  margin-top: auto;
+  padding-top: 5.25rem;
+  padding-bottom: max(1.15rem, env(safe-area-inset-bottom));
+}
+
+html.js:not(.rm) .is-scrub .cayenne-slot {
+  position: static;
+}
+
+html.js:not(.rm) .is-scrub .cayenne-frame {
+  z-index: 3;
+  border-radius: 0;
+}
+
+html.js:not(.rm) .is-scrub .cayenne-drive {
+  display: block;
+}
+
+html.js:not(.rm) .is-scrub .cayenne-still {
+  opacity: 0;
+}
+
+html.js:not(.rm) .is-scrub .credential-copy,
+html.js:not(.rm) .is-scrub .cayenne-credit {
+  position: relative;
+  z-index: 4;
+  opacity: 0;
 }
 
 @media (min-width: 768px) {
-  .credential-copy {
+  .credential-layout {
     padding-right: max(2.5rem, env(safe-area-inset-right));
-    padding-bottom: 8.5rem;
     padding-left: max(2.5rem, env(safe-area-inset-left));
   }
+}
 
-  .cayenne-credit {
-    right: max(2.5rem, env(safe-area-inset-right));
-    left: max(2.5rem, env(safe-area-inset-left));
+@media (min-width: 1024px) {
+  .credential-layout {
+    padding-right: max(3.5rem, env(safe-area-inset-right));
+    padding-left: max(3.5rem, env(safe-area-inset-left));
+  }
+
+  .cayenne-slot {
+    width: min(36vw, calc(var(--src-w) * 1px), calc((100svh - 16rem) * var(--frame-aspect)));
+  }
+
+  html.js:not(.rm) .is-scrub .credential-layout {
+    padding-top: 0;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      "frame copy"
+      "credit copy";
+    align-items: end;
+    column-gap: 3.5rem;
+    row-gap: 1rem;
+    padding-bottom: 2.5rem;
+  }
+
+  html.js:not(.rm) .is-scrub .cayenne-slot {
+    grid-area: frame;
+  }
+
+  html.js:not(.rm) .is-scrub .credential-copy {
+    grid-area: copy;
+    justify-self: start;
+  }
+
+  html.js:not(.rm) .is-scrub .cayenne-credit {
+    grid-area: credit;
+    max-width: 36vw;
   }
 }
 
@@ -267,21 +317,9 @@ html.js:not(.rm) .credential-copy {
     display: none;
   }
 
-  .cayenne-still {
-    display: block;
-  }
-
-  .credential-copy {
-    opacity: 1;
-    animation: credential-fade 0.45s ease both;
-  }
-}
-
-@keyframes credential-fade {
-  from {
-    opacity: 0;
-  }
-  to {
+  .cayenne-still,
+  .credential-copy,
+  .cayenne-credit {
     opacity: 1;
   }
 }

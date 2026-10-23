@@ -1,8 +1,8 @@
 import Link from "next/link"
 import { getProject, site } from "@/content/site"
+import { DeviceFloor } from "@/components/device-stage"
 import { PhoneSlot } from "@/components/phone-slot"
-import { ProjectMockup } from "@/components/mockups"
-import { ScaleFrame } from "@/components/scale-frame"
+import { ProjectFigure } from "@/components/project-figure"
 
 export function Featured() {
   const project = getProject(site.featured.slug)
@@ -21,19 +21,26 @@ export function Featured() {
           data-transition={site.featured.title}
           className="grid items-center gap-8 lg:grid-cols-[auto_minmax(0,32rem)] lg:justify-between lg:gap-16"
         >
-          <PhoneSlot
-            src={cover.src}
-            srcSmall={cover.srcSmall}
-            smallWidth={cover.smallWidth}
-            sizes="560px"
-            width={cover.width}
-            height={cover.height}
-            alt=""
-            label="Home"
-            maxCssWidth={560}
-            maxCssHeight="78dvh"
-            className="justify-self-center lg:justify-self-start"
-          />
+          <div className="relative justify-self-center lg:justify-self-start">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -inset-8 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(243,240,232,0.06),transparent_68%)]"
+            />
+            <PhoneSlot
+              src={cover.src}
+              srcSmall={cover.srcSmall}
+              smallWidth={cover.smallWidth}
+              sizes="560px"
+              width={cover.width}
+              height={cover.height}
+              alt=""
+              label="Home"
+              maxCssWidth={560}
+              maxCssHeight="78dvh"
+              className="shadow-[0_30px_50px_rgba(0,0,0,0.55)]"
+            />
+            <DeviceFloor />
+          </div>
           <div>
             <p className="font-serif text-[clamp(2.8rem,5vw,4.6rem)] italic leading-[0.9] tracking-[-0.045em]">
               {site.featured.title}
@@ -49,11 +56,11 @@ export function Featured() {
           data-transition={site.featured.title}
           className="group block"
         >
-          <ScaleFrame className="border border-line bg-surface">
+          <div className="overflow-hidden border border-line">
             <div className="aspect-[4/5] sm:aspect-[16/10]">
-              <ProjectMockup slug={site.featured.slug} />
+              {project ? <ProjectFigure project={project} presentation="hero" /> : null}
             </div>
-          </ScaleFrame>
+          </div>
           <p className="mt-5 max-w-xl text-muted">{site.featured.caption}</p>
         </Link>
       )}

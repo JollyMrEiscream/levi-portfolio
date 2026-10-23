@@ -1,10 +1,9 @@
 import Link from "next/link"
 import type { Project, ProjectFeature, ProjectTier } from "@/content/site"
-import { ProjectMockup } from "@/components/mockups"
 import { PhonePreviews } from "@/components/phone-previews"
 import { ShotGallery } from "@/components/shot-gallery"
-import { ScaleFrame } from "@/components/scale-frame"
 import { PhoneSlot } from "@/components/phone-slot"
+import { ProjectFigure } from "@/components/project-figure"
 import { LineReveal } from "@/components/text-reveal"
 import { assetPath } from "@/lib/base-path"
 import { pad } from "@/lib/utils"
@@ -66,15 +65,21 @@ export function ProjectView({
 
       {project.videos?.length ? (
         <div className="px-safe">
-          <PhonePreviews videos={project.videos} />
+          <div className="relative mt-14 overflow-hidden border border-line bg-[#0b0b0b]">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_38%,rgba(243,240,232,0.05),transparent_62%)]"
+            />
+            <PhonePreviews videos={project.videos} className="relative mt-0 px-2 py-12 md:px-6 md:py-16" />
+          </div>
         </div>
       ) : (
         <div className="px-safe">
-          <ScaleFrame className="mt-14 border border-line bg-surface">
+          <div className="mt-14 overflow-hidden border border-line">
             <div className="aspect-[4/5] sm:aspect-[16/10]">
-              <ProjectMockup slug={project.slug} />
+              <ProjectFigure project={project} presentation="hero" />
             </div>
-          </ScaleFrame>
+          </div>
         </div>
       )}
 

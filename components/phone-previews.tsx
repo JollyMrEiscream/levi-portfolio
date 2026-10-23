@@ -2,12 +2,14 @@
 
 import { useEffect, useRef } from "react"
 import type { ProjectVideo } from "@/content/site"
+import { DeviceFloor } from "@/components/device-stage"
 import { PhoneSlot } from "@/components/phone-slot"
 import { assetPath } from "@/lib/base-path"
+import { cn } from "@/lib/utils"
 
-export function PhonePreviews({ videos }: { videos: ProjectVideo[] }) {
+export function PhonePreviews({ videos, className }: { videos: ProjectVideo[]; className?: string }) {
   return (
-    <div className="mt-16 grid gap-10 sm:grid-cols-3">
+    <div className={cn("mt-16 grid gap-10 sm:grid-cols-3", className)}>
       {videos.map((video) => (
         <PhonePreview key={video.src ?? video.label} video={video} />
       ))}
@@ -44,15 +46,16 @@ function PhonePreview({ video }: { video: ProjectVideo }) {
 
   return (
     <figure>
-      <PhoneSlot
-        alt={video.label}
-        label={video.label}
-        width={video.width}
-        height={video.height}
-        maxCssWidth={cap}
-        fit="fill"
-        className="mx-auto"
-      >
+      <div className="mx-auto w-fit">
+        <PhoneSlot
+          alt={video.label}
+          label={video.label}
+          width={video.width}
+          height={video.height}
+          maxCssWidth={cap}
+          fit="fill"
+          className="mx-auto shadow-[0_30px_50px_rgba(0,0,0,0.55)]"
+        >
         {video.src ? (
           <video
             ref={ref}
@@ -68,7 +71,9 @@ function PhonePreview({ video }: { video: ProjectVideo }) {
             className="h-full w-full object-contain"
           />
         ) : null}
-      </PhoneSlot>
+        </PhoneSlot>
+        <DeviceFloor />
+      </div>
       {video.src ? (
         <figcaption className="mt-4 text-center font-mono text-[11px] uppercase tracking-[0.18em] text-faint">
           {video.label}

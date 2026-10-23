@@ -1,7 +1,8 @@
 import Link from "next/link"
 import type { Project } from "@/content/site"
-import { ProjectMockup } from "@/components/mockups"
+import { PhoneStage } from "@/components/device-stage"
 import { PhoneSlot } from "@/components/phone-slot"
+import { ProjectFigure } from "@/components/project-figure"
 import { cn, pad } from "@/lib/utils"
 
 export function ProjectCard({
@@ -23,7 +24,7 @@ export function ProjectCard({
       <article>
         <div
           className={cn(
-            "relative overflow-hidden border border-line bg-surface",
+            "relative overflow-hidden border border-line bg-[#0b0b0b] transition-colors duration-500 group-hover:border-white/30",
             variant === "pin" ? "h-[min(64dvh,38rem)] aspect-[4/5]" : "aspect-[4/5]",
           )}
         >
@@ -31,7 +32,7 @@ export function ProjectCard({
             {pad(index + 1)}
           </span>
           {project.cover ? (
-            <div className="flex h-full w-full items-center justify-center p-5" style={{ containerType: "size" }}>
+            <PhoneStage>
               <PhoneSlot
                 src={project.cover.src}
                 srcSmall={project.cover.srcSmall}
@@ -43,12 +44,11 @@ export function ProjectCard({
                 label="Home"
                 maxCssWidth={560}
                 fit="container"
+                className="shadow-[0_30px_50px_rgba(0,0,0,0.55)]"
               />
-            </div>
+            </PhoneStage>
           ) : (
-            <div className="h-full w-full transition-transform duration-700 ease-out motion-reduce:transition-none motion-safe:group-hover:scale-[1.04]">
-              <ProjectMockup slug={project.slug} />
-            </div>
+            <ProjectFigure project={project} presentation="card" />
           )}
         </div>
         <div className="flex items-end justify-between gap-4 pt-5">

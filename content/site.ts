@@ -55,6 +55,18 @@ export type Raster = {
   smallHeight?: number
 }
 
+/** A real product capture. Width and height are the full file, never a display size. */
+export type ProjectScreen = Raster & {
+  alt: string
+  /** Address shown in the browser chrome. */
+  url: string
+  srcMid?: string
+  midWidth?: number
+  srcAvif?: string
+  srcAvifMid?: string
+  srcAvifSmall?: string
+}
+
 /** Full DancingSRQ captures, and the 590-wide WebP used in srcset. */
 export const phoneCapture = { width: 1179, height: 2556 }
 export const phoneCaptureSmall = { width: 590, height: 1279 }
@@ -76,6 +88,8 @@ export type Project = {
   gallery?: ProjectShot[]
   /** Card and featured still, at its intrinsic pixel size. */
   cover?: Raster
+  /** Live-product capture, shown in a browser frame at or below its pixel size. */
+  screen?: ProjectScreen
   /** Small logo shown beside the case-study eyebrow. */
   mark?: Raster
   /** Shown on the case study when the write-up still needs Levi's own story. */
@@ -554,8 +568,23 @@ export const projects: Project[] = [
     year: null,
     platform: "Web",
     stack: ["HTML", "CSS", "JavaScript", "GitHub Pages"],
+    screen: {
+      alt: 'Clear Web Studio homepage. The headline reads "I build clean, modern websites for small businesses." The navigation lists Services, Pricing, Process, and Contact.',
+      url: "https://jollymreiscream.github.io/clear-web-studio/",
+      src: "/media/clear-web-studio/hero.webp",
+      srcMid: "/media/clear-web-studio/hero-1440.webp",
+      srcSmall: "/media/clear-web-studio/hero-800.webp",
+      srcAvif: "/media/clear-web-studio/hero.avif",
+      srcAvifMid: "/media/clear-web-studio/hero-1440.avif",
+      srcAvifSmall: "/media/clear-web-studio/hero-800.avif",
+      width: 2880,
+      height: 1800,
+      midWidth: 1440,
+      smallWidth: 800,
+      smallHeight: 500,
+    },
     paragraphs: [
-      "Clear Web Studio is Levi's freelance web-design studio. The offer is a clean, fast small-business website for a flat $500, plus $75 a month for care and maintenance.",
+      "Clear Web Studio is Levi's freelance web-design studio. The offer is a clean, fast small-business website for a flat $500, plus $75 a month for care and maintenance. The browser frame on this page is a capture of the live homepage.",
       "The public site is a single page with pricing, a process section, a PayPal option, and a contact form. There is also a printable one-pager. Contact is levi@srqcoding.club. The repo also holds about 22 concept mockups for local businesses. Those mockups use photos that are not shown here.",
     ],
     features: [

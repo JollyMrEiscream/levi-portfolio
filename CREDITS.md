@@ -15,3 +15,15 @@ Changes: trimmed, re-ordered, mirrored horizontally, converted to line art (edge
 Site credit: Cayenne footage: "Resident Evil Requiem x Porsche" trailer by Capcom France, CC BY 3.0, via Wikimedia Commons; edited (trimmed, mirrored, converted to line art). Not affiliated with or endorsed by Porsche or Capcom.
 
 The portfolio is not affiliated with or endorsed by Porsche or Capcom.
+
+## Front three-quarter line art
+
+Source photo: "Porsche Cayenne S IMG 0627.jpg" by Alexander Migl
+
+Commons page: https://commons.wikimedia.org/wiki/File:Porsche_Cayenne_S_IMG_0627.jpg
+
+License: CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/)
+
+The videos and stills in `public/media/cayenne/front2/` are adapted material and stay under CC BY-SA 4.0. See `public/media/cayenne/front2/ATTRIBUTION.txt`.
+
+Site credit: Line art based on "Porsche Cayenne S IMG 0627" by Alexander Migl, via Wikimedia Commons, CC BY-SA 4.0. This derivative is licensed CC BY-SA 4.0.

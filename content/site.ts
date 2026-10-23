@@ -161,6 +161,14 @@ export const site = {
     edit: "edited (trimmed, mirrored, converted to line art).",
     disclaimer: "Not affiliated with or endorsed by Porsche or Capcom.",
   },
+  /** Resting front three-quarter line art, shown with the footage credit. */
+  cayenneLineArt: {
+    title: "Porsche Cayenne S IMG 0627",
+    author: "Alexander Migl",
+    fileUrl: "https://commons.wikimedia.org/wiki/File:Porsche_Cayenne_S_IMG_0627.jpg",
+    license: "CC BY-SA 4.0",
+    licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
+  },
   featured: {
     kicker: "In focus",
     slug: "dancingsrq",

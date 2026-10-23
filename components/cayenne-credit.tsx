@@ -1,19 +1,33 @@
 import { site } from "@/content/site"
 
-/** CC BY credit for the Cayenne clip. Visible, small, and linked. */
+/** Credits for the Cayenne clip and the front three-quarter line art. */
 export function CayenneCredit({ className }: { className?: string }) {
-  const credit = site.cayenneCredit
+  const clip = site.cayenneCredit
+  const line = site.cayenneLineArt
   return (
-    <p className={className}>
-      {credit.label}: &quot;{credit.work}&quot; trailer by {credit.author},{" "}
-      <a href={credit.licenseUrl} target="_blank" rel="noreferrer" className="underline decoration-white/25 underline-offset-2 hover:text-foreground">
-        {credit.license}
-      </a>
-      , via{" "}
-      <a href={credit.sourceUrl} target="_blank" rel="noreferrer" className="underline decoration-white/25 underline-offset-2 hover:text-foreground">
-        {credit.source}
-      </a>
-      ; {credit.edit} {credit.disclaimer}
-    </p>
+    <div className={className}>
+      <p>
+        {clip.label}: &quot;{clip.work}&quot; trailer by {clip.author},{" "}
+        <a href={clip.licenseUrl} target="_blank" rel="noreferrer" className="underline decoration-white/25 underline-offset-2 hover:text-foreground">
+          {clip.license}
+        </a>
+        , via{" "}
+        <a href={clip.sourceUrl} target="_blank" rel="noreferrer" className="underline decoration-white/25 underline-offset-2 hover:text-foreground">
+          {clip.source}
+        </a>
+        ; {clip.edit} {clip.disclaimer}
+      </p>
+      <p className="mt-2">
+        Line art based on{" "}
+        <a href={line.fileUrl} target="_blank" rel="noreferrer" className="underline decoration-white/25 underline-offset-2 hover:text-foreground">
+          &quot;{line.title}&quot;
+        </a>{" "}
+        by {line.author}, via Wikimedia Commons,{" "}
+        <a href={line.licenseUrl} target="_blank" rel="noreferrer" className="underline decoration-white/25 underline-offset-2 hover:text-foreground">
+          {line.license}
+        </a>
+        . This derivative is licensed {line.license}.
+      </p>
+    </div>
   )
 }

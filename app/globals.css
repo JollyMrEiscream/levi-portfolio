@@ -187,10 +187,36 @@ html.js:not(.rm) .hero-char {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transform: none;
+}
+
+.cayenne-loop {
+  opacity: 0;
+}
+
+.cayenne-clip,
+.cayenne-loop {
+  transition: opacity 0.4s linear;
+}
+
+.cayenne-pin.is-resting .cayenne-clip {
+  opacity: 0;
+}
+
+.cayenne-pin.is-resting .cayenne-loop {
+  opacity: 1;
 }
 
 .cayenne-still {
   display: none;
+}
+
+.cayenne-fallback .cayenne-drive {
+  display: none;
+}
+
+.cayenne-fallback .cayenne-still {
+  display: block;
 }
 
 .credential-copy {
@@ -200,7 +226,7 @@ html.js:not(.rm) .hero-char {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 7.5rem max(1.25rem, env(safe-area-inset-left)) 6.5rem max(1.25rem, env(safe-area-inset-right));
+  padding: 7.5rem max(1.25rem, env(safe-area-inset-left)) 12rem max(1.25rem, env(safe-area-inset-right));
   background: linear-gradient(to top, rgba(11, 11, 11, 0.88) 0%, rgba(11, 11, 11, 0.46) 34%, transparent 68%);
   pointer-events: none;
 }
@@ -226,7 +252,7 @@ html.js:not(.rm) .credential-copy {
 @media (min-width: 768px) {
   .credential-copy {
     padding-right: max(2.5rem, env(safe-area-inset-right));
-    padding-bottom: 5.5rem;
+    padding-bottom: 8.5rem;
     padding-left: max(2.5rem, env(safe-area-inset-left));
   }
 

@@ -1,0 +1,26 @@
+Porsche Cayenne line art, steep front three-quarter (cayenne-front2)
+====================================================================
+
+Source photo
+  "Porsche Cayenne S IMG 0627.jpg" by Alexander Migl
+  https://commons.wikimedia.org/wiki/File:Porsche_Cayenne_S_IMG_0627.jpg
+  License: Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+  https://creativecommons.org/licenses/by-sa/4.0/
+
+Credit line (use wherever the artwork is shown, e.g. site footer or credits):
+  Line art based on "Porsche Cayenne S IMG 0627" by Alexander Migl, via Wikimedia Commons,
+  CC BY-SA 4.0. This derivative is licensed CC BY-SA 4.0.
+
+License of these files: CC BY-SA 4.0 (share-alike, as required by the source license).
+  The videos and stills in this folder are adapted material and must remain under CC BY-SA 4.0.
+
+Changes made: background removed (rembg isnet-general-use segmentation); converted to
+ink line art (difference-of-Gaussians edges, off-white #EEF0F2 on #0B0B0B); reflections
+inside the windshield and side glass suppressed, leaving only the glass outline; text on the
+front "Cayenne S" display placard blanked, leaving its outline; small stray strokes removed;
+headlight LED glow added; animated as a 4 s seamless push-in loop (at most 1.5%); reframed
+and cropped. Not mirrored, because the car already faces left. No people. The photo has no
+registration plate, only a dealer display placard, and its text was blanked.
+
+"Porsche" and "Cayenne" are trademarks of Dr. Ing. h.c. F. Porsche AG. This is fan art and
+does not imply endorsement.

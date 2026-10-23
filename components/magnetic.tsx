@@ -1,0 +1,53 @@
+"use client"
+
+import { useEffect, useRef } from "react"
+import { gsap } from "@/lib/gsap"
+import { cn } from "@/lib/utils"
+
+export function Magnetic({
+  children,
+  className,
+  strength = 0.35,
+}: {
+  children: React.ReactNode
+  className?: string
+  strength?: number
+}) {
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    if (document.documentElement.classList.contains("rm")) return
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return
+
+    const xTo = gsap.quickTo(el, "x", { duration: 0.45, ease: "power3.out" })
+    const yTo = gsap.quickTo(el, "y", { duration: 0.45, ease: "power3.out" })
+
+    const onMove = (event: MouseEvent) => {
+      const bounds = el.getBoundingClientRect()
+      const dx = event.clientX - (bounds.left + bounds.width / 2)
+      const dy = event.clientY - (bounds.top + bounds.height / 2)
+      xTo(dx * strength)
+      yTo(dy * strength)
+    }
+    const onLeave = () => {
+      xTo(0)
+      yTo(0)
+    }
+
+    el.addEventListener("mousemove", onMove)
+    el.addEventListener("mouseleave", onLeave)
+    return () => {
+      el.removeEventListener("mousemove", onMove)
+      el.removeEventListener("mouseleave", onLeave)
+      gsap.killTweensOf(el)
+    }
+  }, [strength])
+
+  return (
+    <div ref={ref} className={cn("inline-flex", className)}>
+      {children}
+    </div>
+  )
+}

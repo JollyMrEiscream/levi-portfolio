@@ -30,14 +30,14 @@ npm run build
 
 ## Edit the content
 
-Everything visitors read is in [`content/site.ts`](content/site.ts): name, bio, navigation, marquee, the Atlanta track credential, skills, contact, and the seven projects.
+Everything visitors read is in [`content/site.ts`](content/site.ts): name, bio, navigation, marquee, the Atlanta track credential, skills, contact, and the six projects.
 
 - Set `email` and flip `emailIsPlaceholder` to `false` when the address is real.
 - Fill `year`, `liveUrl`, `repoUrl`, and `stack` on each project. Use `null` or an empty stack until you have them.
 - Set `placeholder: false` on a project after you replace the starter paragraphs.
 - Add social links to `socials`. They render in the contact section and the footer.
 - Add tools only after you’re happy putting them on the site. A few ideas are commented near the skills list in that file.
-- Visuals without a photo live in [`components/mockups.tsx`](components/mockups.tsx). DancingSRQ stills in `public/media/dancingsrq` are 1179×2556 WebP files with a 590-wide srcset variant. The three preview clips are muted 590×1280 H.264. The Cayenne credential plays the muted full-viewport line-art clip in `public/media/cayenne` once, then loops the front three-quarter still in `public/media/cayenne/front2`. Credit for both is in [`CREDITS.md`](CREDITS.md). Logos for the studio, Halloween Manhunt, and LockScreenRotator are in `public/media`.
+- Visuals without a photo live in [`components/mockups.tsx`](components/mockups.tsx). DancingSRQ stills in `public/media/dancingsrq` are 1179×2556 WebP files with a 590-wide srcset variant. The three preview clips are muted 590×1280 H.264. The Cayenne credential plays the muted full-viewport line-art clip in `public/media/cayenne` once, then loops the front three-quarter still in `public/media/cayenne/front2`. Credit for both is in [`CREDITS.md`](CREDITS.md). Logos for the studio and LockScreenRotator are in `public/media`.
 
 There are no API keys and no `.env` file. Don’t commit secrets.
 

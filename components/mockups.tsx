@@ -14,7 +14,6 @@ export function ProjectMockup({
       {slug === "notch-media" && <NotchMockup />}
       {slug === "vela" && <VelaMockup />}
       {slug === "clear-web-studio" && <StudioMockup />}
-      {slug === "halloween-manhunt" && <ManhuntMockup />}
       {slug === "lockscreen-rotator" && <LockMockup />}
       {slug === "church-bell-tower-watch" && <TowerMockup />}
     </div>
@@ -166,27 +165,6 @@ function StudioMockup() {
           </div>
         </div>
       ))}
-    </>
-  )
-}
-
-function ManhuntMockup() {
-  return (
-    <>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_55%,rgba(249,115,22,0.35),transparent_42%),linear-gradient(#161616_1px,transparent_1px),linear-gradient(90deg,#161616_1px,transparent_1px)] bg-[size:auto,28px_28px,28px_28px]" />
-      <div className="absolute left-1/2 top-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full border border-orange-500/70" />
-      <div className="absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full border border-orange-400/50" />
-      <img
-        src={assetPath("/media/halloween-manhunt/mark.svg")}
-        alt=""
-        width={64}
-        height={64}
-        style={{ maxWidth: 64, maxHeight: 64 }}
-        className="absolute left-1/2 top-1/2 h-14 w-14 -translate-x-1/2 -translate-y-1/2 object-contain"
-      />
-      <p className="absolute bottom-5 left-5 font-mono text-[11px] uppercase tracking-[0.18em] text-white/50">
-        Downtown Sarasota
-      </p>
     </>
   )
 }

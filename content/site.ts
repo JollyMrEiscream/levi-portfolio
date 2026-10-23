@@ -574,44 +574,6 @@ export const projects: Project[] = [
     repoUrl: "https://github.com/JollyMrEiscream/clear-web-studio",
   },
   {
-    slug: "halloween-manhunt",
-    title: "Halloween Manhunt",
-    titleLines: ["Halloween", "Manhunt"],
-    eyebrow: "Live game",
-    summary: "Hide-and-seek across downtown Sarasota, played live on a 3D map in the phone browser.",
-    year: null,
-    platform: "Web",
-    status: "Live",
-    stack: ["Vite", "React", "TypeScript", "Firebase", "Mapbox GL"],
-    paragraphs: [
-      "Halloween Manhunt is a real-world hide-and-seek game across downtown Sarasota, played on a 3D map in the phone browser.",
-      "The mark on this page is the project's favicon. The map scene is drawn here. There are no gameplay screenshots in the repo.",
-    ],
-    features: [
-      {
-        title: "Rooms",
-        detail: "Join with a room code, then split into hiders and seekers.",
-      },
-      {
-        title: "A shrinking zone",
-        detail: "The play zone shrinks as sectors lock every 15 minutes. The sectors are GeoJSON over downtown Sarasota and UTC.",
-      },
-      {
-        title: "Pings and rules",
-        detail: "Hider locations ping to seekers every 5 minutes. There is a transit corridor rule, and host or referee controls.",
-      },
-    ],
-    challenges: [
-      {
-        title: "Realtime on a map",
-        detail: "Game state is realtime in Firebase. The board is a Mapbox GL 3D map.",
-      },
-    ],
-    placeholder: false,
-    liveUrl: "https://halloween-manhunt-srq.web.app",
-    repoUrl: null,
-  },
-  {
     slug: "lockscreen-rotator",
     title: "LockScreenRotator",
     titleLines: ["LockScreen", "Rotator"],

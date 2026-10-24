@@ -17,11 +17,17 @@ const CLIP_POSTER = "/media/cayenne/poster.webp"
 const STILL_PORTRAIT = "/media/cayenne/front2/cayenne-front2-portrait-1080x1920.webp"
 const STILL_HD = "/media/cayenne/front2/cayenne-front2-1080p.webp"
 
-/** Scroll, in viewport heights: clip scrub, then the crossfade, then the collapse. */
-const CLIP_VH = 1.75
-const FADE_VH = 0.2
-const COLLAPSE_VH = 0.85
-const TOTAL_VH = CLIP_VH + FADE_VH + COLLAPSE_VH
+/**
+ * One pinned gesture, in viewport heights.
+ * The clip plays, then the camera is already moving when the light catches the car.
+ */
+const TOTAL_VH = 2.65
+const DRIVE_END = 0.62
+const MOVE_START = 0.48
+const WIPE_START = 0.52
+const WIPE_SPAN = 0.09
+const COPY_START = 0.58
+const CREDIT_START = 0.66
 
 type Source = { src: string; type: string; media?: string }
 
@@ -85,16 +91,71 @@ function mountSources(video: HTMLVideoElement, sources: Source[]) {
   video.load()
 }
 
+function clamp01(value: number) {
+  if (value <= 0) return 0
+  if (value >= 1) return 1
+  return value
+}
+
 function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t
+}
+
+/** Fast leave, long settle. */
+function expoOut(value: number) {
+  const t = clamp01(value)
+  return t >= 1 ? 1 : 1 - Math.pow(2, -10 * t)
+}
+
+function power4Out(value: number) {
+  const t = clamp01(value)
+  return 1 - Math.pow(1 - t, 4)
+}
+
+type Rig = {
+  frameScale: number
+  tx: number
+  ty: number
+  inner: number
+  wide: boolean
+}
+
+function measureRig(section: HTMLElement, slot: HTMLElement): Rig | null {
+  const sectionBox = section.getBoundingClientRect()
+  const slotBox = slot.getBoundingClientRect()
+  if (slotBox.width < 8 || slotBox.height < 8 || sectionBox.width < 8) return null
+
+  const kind = sourceKind()
+  const videoW = kind === "portrait" ? 1080 : kind === "small" ? 1280 : 1920
+  const videoH = kind === "portrait" ? 1920 : kind === "small" ? 720 : 1080
+  const stillW = kind === "portrait" ? 1080 : 1920
+  const stillH = kind === "portrait" ? 1920 : 1080
+  const srcW = Math.min(videoW, stillW)
+  const srcH = Math.min(videoH, stillH)
+  const dpr = window.devicePixelRatio || 1
+  const cover = Math.max(sectionBox.width / slotBox.width, sectionBox.height / slotBox.height)
+  const cap = Math.min(srcW / (slotBox.width * dpr), srcH / (slotBox.height * dpr))
+  const frameScale = Math.min(cover, Math.max(1, cap))
+  const slotCx = slotBox.left - sectionBox.left + slotBox.width / 2
+  const slotCy = slotBox.top - sectionBox.top + slotBox.height / 2
+
+  return {
+    frameScale,
+    tx: sectionBox.width / 2 - slotCx,
+    ty: sectionBox.height / 2 - slotCy,
+    inner: Math.min(1.06, cap / frameScale),
+    wide: window.innerWidth >= 1024,
+  }
 }
 
 export function Credential() {
   const sectionRef = useRef<HTMLElement>(null)
   const slotRef = useRef<HTMLDivElement>(null)
   const frameRef = useRef<HTMLDivElement>(null)
+  const mediaRef = useRef<HTMLDivElement>(null)
   const clipRef = useRef<HTMLVideoElement>(null)
   const stillRef = useRef<HTMLPictureElement>(null)
+  const sweepRef = useRef<HTMLDivElement>(null)
   const copyRef = useRef<HTMLDivElement>(null)
   const creditRef = useRef<HTMLDivElement>(null)
 
@@ -102,11 +163,13 @@ export function Credential() {
     const section = sectionRef.current
     const slot = slotRef.current
     const frame = frameRef.current
+    const media = mediaRef.current
     const clip = clipRef.current
     const still = stillRef.current
+    const sweep = sweepRef.current
     const copy = copyRef.current
     const credit = creditRef.current
-    if (!section || !slot || !frame || !clip || !still || !copy || !credit) return
+    if (!section || !slot || !frame || !media || !clip || !still || !sweep || !copy || !credit) return
     applyKind(section)
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
 
@@ -181,52 +244,84 @@ export function Credential() {
       else clip.addEventListener("loadeddata", kick, { once: true })
     }
 
-    const clearFrame = () => {
-      frame.style.top = ""
-      frame.style.left = ""
-      frame.style.width = ""
-      frame.style.height = ""
+    const textNodes = [
+      ...copy.querySelectorAll<HTMLElement>(".credential-kicker, .credential-line, .credential-meta"),
+    ]
+    let rig: Rig | null = measureRig(section, slot)
+
+    const clearMotion = () => {
+      frame.style.transform = ""
       frame.style.borderRadius = ""
+      frame.style.boxShadow = ""
+      media.style.transform = ""
+      still.style.clipPath = ""
+      clip.style.opacity = ""
+      sweep.style.opacity = ""
+      sweep.style.transform = ""
+      credit.style.opacity = ""
+      credit.style.transform = ""
+      for (const node of textNodes) {
+        node.style.opacity = ""
+        node.style.transform = ""
+      }
     }
 
     const paint = (progress: number) => {
-      const clipEnd = CLIP_VH / TOTAL_VH
-      const fadeEnd = (CLIP_VH + FADE_VH) / TOTAL_VH
-      const clipP = Math.min(1, progress / clipEnd)
-      const fadeP = progress <= clipEnd ? 0 : progress >= fadeEnd ? 1 : (progress - clipEnd) / (fadeEnd - clipEnd)
-      const collapseP = progress <= fadeEnd ? 0 : (progress - fadeEnd) / (1 - fadeEnd)
+      const p = clamp01(progress)
+      const driveP = clamp01(p / DRIVE_END)
+      const moveP = clamp01((p - MOVE_START) / (1 - MOVE_START))
+      const moveT = expoOut(moveP)
+      const sweepT = clamp01((p - WIPE_START) / WIPE_SPAN)
+      const wipe = power4Out(clamp01((sweepT - 0.18) / 0.5))
 
       const duration = clip.duration
-      if (duration && Number.isFinite(duration)) requestSeek(clipP * Math.max(0, duration - 0.05))
+      if (duration && Number.isFinite(duration)) requestSeek(driveP * Math.max(0, duration - 0.05))
 
       const stillImg = still.querySelector("img")
       const stillReady = !!stillImg && stillImg.complete && stillImg.naturalWidth > 0
-      if (clip.classList.contains("is-broken")) {
-        clip.style.opacity = "0"
-        still.style.opacity = "1"
-      } else {
-        const fade = stillReady ? fadeP : 0
-        clip.style.opacity = String(1 - fade)
-        still.style.opacity = String(fade)
-      }
-      const shown = String(collapseP)
-      copy.style.opacity = shown
-      credit.style.opacity = shown
+      const broken = clip.classList.contains("is-broken")
+      const reveal = broken || !stillReady ? (broken ? 1 : 0) : wipe
+      still.style.clipPath = reveal >= 1 ? "inset(0 0 0 0)" : `inset(0 ${(1 - reveal) * 100}% 0 0)`
+      clip.style.opacity = broken || reveal >= 0.995 ? "0" : "1"
 
-      if (collapseP <= 0) {
-        clearFrame()
-        return
-      }
+      const sweepOn = !broken && stillReady && sweepT > 0 && sweepT < 1
+      sweep.style.opacity = sweepOn ? String(Math.sin(sweepT * Math.PI)) : "0"
+      sweep.style.transform = `translate3d(${lerp(-72, 72, sweepT)}%, 0, 0)`
 
-      const slotBox = slot.getBoundingClientRect()
-      const root = section.getBoundingClientRect()
-      const fullW = section.clientWidth
-      const fullH = section.clientHeight
-      frame.style.top = `${lerp(0, slotBox.top - root.top, collapseP)}px`
-      frame.style.left = `${lerp(0, slotBox.left - root.left, collapseP)}px`
-      frame.style.width = `${lerp(fullW, slotBox.width, collapseP)}px`
-      frame.style.height = `${lerp(fullH, slotBox.height, collapseP)}px`
-      frame.style.borderRadius = `${lerp(0, 20, collapseP)}px`
+      if (!rig) rig = measureRig(section, slot)
+      const pose = rig
+      const scale = pose ? lerp(pose.frameScale, 1, moveT) : 1
+      const arc = Math.sin(clamp01(moveT) * Math.PI)
+      const x = pose ? pose.tx * (1 - moveT) + arc * (pose.wide ? 48 : 16) : 0
+      const y = pose ? pose.ty * (1 - moveT) - arc * (pose.wide ? 34 : 20) : 0
+      frame.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0) scale(${scale.toFixed(4)})`
+      const visualRadius = 22 * moveT
+      frame.style.borderRadius = `${(visualRadius / Math.max(scale, 0.2)).toFixed(2)}px`
+
+      const land = clamp01((1.22 - scale) / 0.22)
+      frame.style.boxShadow =
+        land <= 0
+          ? "none"
+          : `0 0 0 1px rgba(243,240,232,${(0.38 * land).toFixed(3)}), 0 0 ${(36 * land).toFixed(1)}px rgba(243,240,232,${(0.09 * land).toFixed(3)}), 0 ${(24 * land).toFixed(1)}px ${(54 * land).toFixed(1)}px rgba(0,0,0,${(0.48 * land).toFixed(3)})`
+
+      const drift = 1 - moveT
+      const inner = pose ? pose.inner : 1
+      const mediaScale = 1 + (inner - 1) * drift
+      media.style.transform = `translate3d(${(drift * -2.4).toFixed(2)}%, ${(drift * 1.2).toFixed(2)}%, 0) scale(${mediaScale.toFixed(4)})`
+
+      const wide = pose?.wide ?? window.innerWidth >= 1024
+      textNodes.forEach((node, index) => {
+        const start = COPY_START + index * 0.025
+        const shown = power4Out(clamp01((p - start) / 0.2))
+        node.style.opacity = String(shown)
+        node.style.transform = wide
+          ? `translate3d(${((1 - shown) * 36).toFixed(2)}px, 0, 0)`
+          : `translate3d(0, ${((1 - shown) * 18).toFixed(2)}px, 0)`
+      })
+
+      const creditShown = power4Out(clamp01((p - CREDIT_START) / 0.18))
+      credit.style.opacity = String(creditShown)
+      credit.style.transform = `translate3d(0, ${((1 - creditShown) * 14).toFixed(2)}px, 0)`
     }
 
     mountSources(clip, scrubSources())
@@ -244,6 +339,7 @@ export function Credential() {
       applyKind(section)
       mountSources(clip, scrubSources())
       prime()
+      rig = null
       ScrollTrigger.refresh()
     }
     portraitQ.addEventListener("change", onChange)
@@ -259,7 +355,10 @@ export function Credential() {
       anticipatePin: 1,
       invalidateOnRefresh: true,
       onUpdate: (self) => paint(self.progress),
-      onRefresh: (self) => paint(self.progress),
+      onRefresh: (self) => {
+        rig = measureRig(section, slot)
+        paint(self.progress)
+      },
     })
 
     paint(trigger.progress)
@@ -273,7 +372,7 @@ export function Credential() {
       smallQ.removeEventListener("change", onChange)
       trigger.kill()
       section.classList.remove("is-scrub")
-      clearFrame()
+      clearMotion()
       clip.pause()
     }
   }, [])
@@ -288,40 +387,43 @@ export function Credential() {
       <div className="credential-layout">
         <div ref={slotRef} className="cayenne-slot">
           <div ref={frameRef} className="cayenne-frame">
-            <div className="cayenne-drive" aria-hidden>
-              <video
-                ref={clipRef}
-                className="cayenne-video cayenne-clip"
-                poster={assetPath(CLIP_POSTER)}
-                muted
-                playsInline
-                preload="auto"
-                disablePictureInPicture
-              />
+            <div ref={mediaRef} className="cayenne-media">
+              <div className="cayenne-drive" aria-hidden>
+                <video
+                  ref={clipRef}
+                  className="cayenne-video cayenne-clip"
+                  poster={assetPath(CLIP_POSTER)}
+                  muted
+                  playsInline
+                  preload="auto"
+                  disablePictureInPicture
+                />
+              </div>
+              <picture ref={stillRef} className="cayenne-still">
+                <source media="(max-aspect-ratio: 1/1)" srcSet={assetPath(STILL_PORTRAIT)} />
+                <img
+                  src={assetPath(STILL_HD)}
+                  alt="Line drawing of a Cayenne, front three-quarter"
+                  width={1920}
+                  height={1080}
+                />
+              </picture>
+              <div ref={sweepRef} className="cayenne-sweep" aria-hidden />
             </div>
-            <picture ref={stillRef} className="cayenne-still">
-              <source media="(max-aspect-ratio: 1/1)" srcSet={assetPath(STILL_PORTRAIT)} />
-              <img
-                src={assetPath(STILL_HD)}
-                alt="Line drawing of a Cayenne, front three-quarter"
-                width={1920}
-                height={1080}
-              />
-            </picture>
           </div>
         </div>
         <div ref={copyRef} className="credential-copy">
-          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-faint">
+          <p className="credential-kicker font-mono text-[11px] uppercase tracking-[0.22em] text-faint">
             {site.credential.index} — {site.credential.kicker}
           </p>
           <h2 className="mt-3 max-w-xl text-[clamp(1.7rem,4.6vw,5rem)] leading-[0.9] tracking-[-0.05em]">
             {site.credential.lines.map((line) => (
-              <span key={line} className="block">
+              <span key={line} className="credential-line block">
                 {line}
               </span>
             ))}
           </h2>
-          <div className="mt-3 max-w-md">
+          <div className="credential-meta mt-3 max-w-md">
             <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">{site.credential.program}</p>
             <p className="mt-2 text-base text-muted">{site.credential.place}</p>
             <p className="mt-2 text-sm leading-snug text-muted md:mt-3 md:text-base md:leading-relaxed">{site.credential.detail}</p>

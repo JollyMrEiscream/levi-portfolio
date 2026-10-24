@@ -189,6 +189,17 @@ html.js:not(.rm) .hero-char {
   overflow: hidden;
   border-radius: 1.25rem;
   pointer-events: none;
+  transform-origin: center center;
+}
+
+.cayenne-media {
+  position: absolute;
+  inset: 0;
+  transform-origin: center center;
+}
+
+.cayenne-sweep {
+  display: none;
 }
 
 .cayenne-drive,
@@ -244,7 +255,12 @@ html.js:not(.rm) .is-scrub .credential-layout {
 }
 
 html.js:not(.rm) .is-scrub .cayenne-slot {
-  position: static;
+  z-index: 3;
+}
+
+html.js:not(.rm) .is-scrub .cayenne-frame,
+html.js:not(.rm) .is-scrub .cayenne-media {
+  will-change: transform;
 }
 
 html.js:not(.rm) .is-scrub .cayenne-frame {
@@ -254,17 +270,48 @@ html.js:not(.rm) .is-scrub .cayenne-frame {
 
 html.js:not(.rm) .is-scrub .cayenne-drive {
   display: block;
+  z-index: 0;
 }
 
 html.js:not(.rm) .is-scrub .cayenne-still {
+  z-index: 1;
+  clip-path: inset(0 100% 0 0);
+}
+
+html.js:not(.rm) .is-scrub .cayenne-sweep {
+  display: block;
+  position: absolute;
+  z-index: 2;
+  top: -25%;
+  bottom: -25%;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(
+    108deg,
+    transparent 30%,
+    rgba(243, 240, 232, 0.05) 42%,
+    rgba(243, 240, 232, 0.92) 50%,
+    rgba(243, 240, 232, 0.06) 58%,
+    transparent 70%
+  );
+  mix-blend-mode: screen;
   opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
 }
 
 html.js:not(.rm) .is-scrub .credential-copy,
 html.js:not(.rm) .is-scrub .cayenne-credit {
   position: relative;
   z-index: 4;
+}
+
+html.js:not(.rm) .is-scrub .credential-kicker,
+html.js:not(.rm) .is-scrub .credential-line,
+html.js:not(.rm) .is-scrub .credential-meta,
+html.js:not(.rm) .is-scrub .cayenne-credit {
   opacity: 0;
+  will-change: transform, opacity;
 }
 
 @media (min-width: 768px) {

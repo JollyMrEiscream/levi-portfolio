@@ -162,9 +162,8 @@ export const site = {
     kicker: "Jungle → Compass",
     lines: ["From Jungle,", "I started Compass."],
     paragraphs: [
-      "Jungle Robotics is where I started. Complications with the school system, and funding that stayed limited, made moving on the better path for the team. Compass was that step.",
-      "I created Compass. Captain was decided by a vote, and I won the election. I serve as captain and business lead.",
-      "The hours go to sponsors and fundraising, to outreach and partners, and to the admin that holds a season together: boards and planning.",
+      "Jungle Robotics is where I started, and I carried that with me until complications with the school system and funding that stayed limited made moving on the better path for the future of the team. Compass is the team I created from that.",
+      "We held a vote for captain, and I won the election, which is how I came to serve as captain and business lead. Most of my time now runs through sponsors and fundraising, through outreach and the partners we rely on, and through the admin that keeps a season standing: boards and planning.",
     ],
     stops: [
       {
@@ -196,8 +195,7 @@ export const site = {
     href: "https://compass-robotics.com/",
   },
   /**
-   * Track credential. Edit the words here.
-   * The line-art clip fills the viewport and is credited in cayenneCredit and CREDITS.md.
+   * Track credential. The frame is the front still, credited in cayenneCredit and CREDITS.md.
    */
   credential: {
     index: "01",

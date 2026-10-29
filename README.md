@@ -10,7 +10,7 @@ Personal portfolio for Levi Szantosi — a developer and aspiring game designer 
 - [Lenis](https://github.com/darkroomengineering/lenis) for smooth inertial scrolling on desktop
 - A shadcn-style `Button` (`components/ui/button.tsx`) for actions
 
-Motion is lighter on small screens and on touch devices: no custom cursor, no magnetic pull, native scrolling instead of Lenis, and the project reel stacks vertically instead of pinning. `prefers-reduced-motion` skips the intro, the page wipe, smooth scrolling, and scroll-linked animation. The Cayenne credential then shows the front still in a small frame, with no pin and no scrub.
+Motion is lighter on small screens and on touch devices: no custom cursor, no magnetic pull, native scrolling instead of Lenis, and the project reel stacks vertically instead of pinning. `prefers-reduced-motion` skips the intro, the page wipe, smooth scrolling, and scroll-linked animation. The Cayenne credential is the front still, which fades and scales into place as the section arrives.
 
 ## Run it
 
@@ -37,7 +37,7 @@ Everything visitors read is in [`content/site.ts`](content/site.ts): name, bio, 
 - Set `placeholder: false` on a project after you replace the starter paragraphs.
 - Add social links to `socials`. They render in the contact section and the footer.
 - Add tools only after you’re happy putting them on the site. A few ideas are commented near the skills list in that file.
-- Visuals without a photo live in [`components/mockups.tsx`](components/mockups.tsx). Clear Web Studio uses a capture of the live homepage in `public/media/clear-web-studio` (WebP and AVIF, with 800 and 1440 srcset files under the 2880-wide original). DancingSRQ stills in `public/media/dancingsrq` are 1179×2556 WebP files with a 590-wide srcset variant. The three preview clips are muted 590×1280 H.264. The Cayenne credential pins on scroll: the line-art clip in `public/media/cayenne` scrubs with the page, a light sweep hands that frame off to the front still in `public/media/cayenne/front2`, and the same frame pulls back along a curve into the rounded box while the credential copy arrives. The box then scrolls away with the page. Credit for both is in [`CREDITS.md`](CREDITS.md). Logos for the studio and LockScreenRotator are in `public/media`.
+- Visuals without a photo live in [`components/mockups.tsx`](components/mockups.tsx). Clear Web Studio uses a capture of the live homepage in `public/media/clear-web-studio` (WebP and AVIF, with 800 and 1440 srcset files under the 2880-wide original). DancingSRQ stills in `public/media/dancingsrq` are 1179×2556 WebP files with a 590-wide srcset variant. The three preview clips are muted 590×1280 H.264. The Cayenne credential shows the front still in `public/media/cayenne/front2`, with credit in [`CREDITS.md`](CREDITS.md). Logos for the studio and LockScreenRotator are in `public/media`.
 
 There are no API keys and no `.env` file. Don’t commit secrets.
 

@@ -182,8 +182,6 @@ html.js:not(.rm) .hero-char {
 }
 
 .cayenne-frame,
-.cayenne-drive,
-.cayenne-video,
 .cayenne-still,
 .cayenne-still img {
   background: #0b0b0b;
@@ -194,39 +192,30 @@ html.js:not(.rm) .hero-char {
   inset: 0;
   overflow: hidden;
   border-radius: 1.25rem;
-  pointer-events: none;
   transform-origin: center center;
+  box-shadow:
+    0 0 0 1px rgba(243, 240, 232, 0.28),
+    0 22px 48px rgba(0, 0, 0, 0.38);
 }
 
-.cayenne-media {
-  position: absolute;
-  inset: 0;
-  transform-origin: center center;
+html.js:not(.rm) .cayenne-frame {
+  opacity: 0;
+  transform: translate3d(0, 2.25rem, 0) scale(0.97);
 }
 
-.cayenne-sweep {
-  display: none;
-}
-
-.cayenne-drive,
 .cayenne-still {
   position: absolute;
   inset: 0;
 }
 
-.cayenne-drive {
-  display: none;
-}
-
-.cayenne-video,
 .cayenne-still img {
   position: absolute;
   inset: 0;
   display: block;
   width: 100%;
   height: 100%;
+  max-width: none;
   object-fit: cover;
-  transform: none;
 }
 
 .credential-copy {
@@ -247,79 +236,6 @@ html.js:not(.rm) .hero-char {
   }
 }
 
-html.js:not(.rm) .credential-section.is-scrub {
-  display: flex;
-  flex-direction: column;
-  height: 100svh;
-}
-
-html.js:not(.rm) .is-scrub .credential-layout {
-  width: 100%;
-  margin-top: auto;
-  padding-top: 5.25rem;
-  padding-bottom: max(1.15rem, env(safe-area-inset-bottom));
-}
-
-html.js:not(.rm) .is-scrub .cayenne-slot {
-  z-index: 3;
-}
-
-html.js:not(.rm) .is-scrub .cayenne-frame,
-html.js:not(.rm) .is-scrub .cayenne-media {
-  will-change: transform;
-}
-
-html.js:not(.rm) .is-scrub .cayenne-frame {
-  z-index: 3;
-  border-radius: 0;
-}
-
-html.js:not(.rm) .is-scrub .cayenne-drive {
-  display: block;
-  z-index: 0;
-}
-
-html.js:not(.rm) .is-scrub .cayenne-still {
-  z-index: 1;
-  clip-path: inset(0 100% 0 0);
-}
-
-html.js:not(.rm) .is-scrub .cayenne-sweep {
-  display: block;
-  position: absolute;
-  z-index: 2;
-  top: -25%;
-  bottom: -25%;
-  left: 0;
-  width: 100%;
-  background: linear-gradient(
-    108deg,
-    transparent 30%,
-    rgba(243, 240, 232, 0.05) 42%,
-    rgba(243, 240, 232, 0.92) 50%,
-    rgba(243, 240, 232, 0.06) 58%,
-    transparent 70%
-  );
-  mix-blend-mode: screen;
-  opacity: 0;
-  pointer-events: none;
-  will-change: transform, opacity;
-}
-
-html.js:not(.rm) .is-scrub .credential-copy,
-html.js:not(.rm) .is-scrub .cayenne-credit {
-  position: relative;
-  z-index: 4;
-}
-
-html.js:not(.rm) .is-scrub .credential-kicker,
-html.js:not(.rm) .is-scrub .credential-line,
-html.js:not(.rm) .is-scrub .credential-meta,
-html.js:not(.rm) .is-scrub .cayenne-credit {
-  opacity: 0;
-  will-change: transform, opacity;
-}
-
 @media (min-width: 768px) {
   .credential-layout {
     padding-right: max(2.5rem, env(safe-area-inset-right));
@@ -337,8 +253,7 @@ html.js:not(.rm) .is-scrub .cayenne-credit {
     width: min(36vw, calc(var(--src-w) * 1px), calc((100svh - 16rem) * var(--frame-aspect)));
   }
 
-  html.js:not(.rm) .is-scrub .credential-layout {
-    padding-top: 0;
+  .credential-layout {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
     grid-template-areas:
@@ -347,33 +262,22 @@ html.js:not(.rm) .is-scrub .cayenne-credit {
     align-items: end;
     column-gap: 3.5rem;
     row-gap: 1rem;
-    padding-bottom: 2.5rem;
+    padding-top: 7rem;
+    padding-bottom: 4rem;
   }
 
-  html.js:not(.rm) .is-scrub .cayenne-slot {
+  .cayenne-slot {
     grid-area: frame;
   }
 
-  html.js:not(.rm) .is-scrub .credential-copy {
+  .credential-copy {
     grid-area: copy;
     justify-self: start;
   }
 
-  html.js:not(.rm) .is-scrub .cayenne-credit {
+  .cayenne-credit {
     grid-area: credit;
     max-width: 36vw;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .cayenne-drive {
-    display: none;
-  }
-
-  .cayenne-still,
-  .credential-copy,
-  .cayenne-credit {
-    opacity: 1;
   }
 }
 

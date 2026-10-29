@@ -6,7 +6,8 @@
  *
  * The robotics journey uses Levi's own account of leaving Jungle for Compass,
  * plus the team pages on compass-robotics.com. He created Compass and is
- * captain and business lead. Do not add years, awards, or other titles.
+ * team captain, and he spends much of his time on the business side. Do not
+ * call him business lead. Do not add years, awards, or other titles.
  */
 
 export type ProjectFeature = {
@@ -163,7 +164,7 @@ export const site = {
     lines: ["From Jungle,", "I started Compass."],
     paragraphs: [
       "Jungle Robotics is where I started, and I carried that with me until complications with the school system and funding that stayed limited made moving on the better path for the future of the team. Compass is the team I created from that.",
-      "We held a vote for captain, and I won the election, which is how I came to serve as captain and business lead. Most of my time now runs through sponsors and fundraising, through outreach and the partners we rely on, and through the admin that keeps a season standing: boards and planning.",
+      "We held a vote for captain, and I won the election. I am team captain, and a lot of my time goes to the business side of that work: sponsors and fundraising, outreach and the partners we rely on, and the admin of boards and planning.",
     ],
     stops: [
       {
@@ -177,7 +178,7 @@ export const site = {
         name: "Compass Robotics",
         kind: "Community FRC",
         place: "Sarasota",
-        role: "Captain and business lead",
+        role: "Team captain",
         href: "https://compass-robotics.com/",
         mark: { src: "/media/compass/mark.svg", width: 1005.13, height: 1010.7931 },
       },

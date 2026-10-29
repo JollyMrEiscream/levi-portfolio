@@ -6,8 +6,20 @@ import { LineReveal } from "@/components/text-reveal"
 import { assetPath } from "@/lib/base-path"
 import { gsap } from "@/lib/gsap"
 
-const MARK_W = 1005.13
-const MARK_H = 1010.7931
+function TeamMark({ src, width, height }: { src: string; width: number; height: number }) {
+  return (
+    <img
+      src={assetPath(src)}
+      alt=""
+      width={width}
+      height={height}
+      loading="lazy"
+      decoding="async"
+      className="mt-0.5 h-16 w-auto max-h-16 shrink-0 opacity-90"
+      style={{ aspectRatio: `${width} / ${height}` }}
+    />
+  )
+}
 
 export function Journey() {
   const routeRef = useRef<HTMLOListElement>(null)
@@ -55,18 +67,7 @@ export function Journey() {
                 const last = index === site.journey.stops.length - 1
                 const body = (
                   <span className="flex items-start gap-4">
-                    {last ? (
-                      <img
-                        src={assetPath("/media/compass/mark.svg")}
-                        alt=""
-                        width={MARK_W}
-                        height={MARK_H}
-                        loading="lazy"
-                        decoding="async"
-                        className="mt-0.5 h-16 w-auto max-h-16 shrink-0 opacity-90"
-                        style={{ aspectRatio: `${MARK_W} / ${MARK_H}` }}
-                      />
-                    ) : null}
+                    <TeamMark src={stop.mark.src} width={stop.mark.width} height={stop.mark.height} />
                     <span className="min-w-0">
                       <span className="block text-[clamp(1.6rem,3vw,2.4rem)] leading-none tracking-[-0.04em]">{stop.name}</span>
                       <span className="mt-3 block font-mono text-[11px] uppercase tracking-[0.16em] text-faint">{stop.kind}</span>
@@ -78,7 +79,7 @@ export function Journey() {
                   </span>
                 )
                 return (
-                  <li key={stop.name} className="relative flex gap-5 pb-12 last:pb-0">
+                  <li key={stop.name} className="relative flex gap-5 pb-14 last:pb-0">
                     {last ? null : (
                       <span className="journey-line absolute left-[5px] top-[13px] -bottom-[13px] w-px bg-foreground/30" aria-hidden />
                     )}
@@ -90,19 +91,15 @@ export function Journey() {
                       }
                       aria-hidden
                     />
-                    {last ? (
-                      <a
-                        href={site.journey.href}
-                        target="_blank"
-                        rel="noreferrer"
-                        data-cursor="Open"
-                        className="block min-w-0 transition-transform duration-500 ease-out motion-reduce:transition-none motion-safe:hover:translate-x-2"
-                      >
-                        {body}
-                      </a>
-                    ) : (
-                      <div className="min-w-0">{body}</div>
-                    )}
+                    <a
+                      href={stop.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      data-cursor="Open"
+                      className="block min-w-0 transition-transform duration-500 ease-out motion-reduce:transition-none motion-safe:hover:translate-x-2"
+                    >
+                      {body}
+                    </a>
                   </li>
                 )
               })}

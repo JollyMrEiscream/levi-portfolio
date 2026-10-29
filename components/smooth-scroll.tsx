@@ -11,7 +11,9 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const reduce = document.documentElement.classList.contains("rm")
     const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches
-    if (reduce || !fine) return
+    const nav = navigator as Navigator & { deviceMemory?: number; connection?: { saveData?: boolean } }
+    const weak = (typeof nav.deviceMemory === "number" && nav.deviceMemory <= 4) || Boolean(nav.connection?.saveData)
+    if (reduce || !fine || weak) return
 
     const lenis = new Lenis({
       lerp: 0.085,

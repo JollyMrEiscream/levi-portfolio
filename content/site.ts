@@ -160,23 +160,27 @@ export const site = {
    */
   journey: {
     kicker: "Jungle → Compass",
-    lines: ["I left Jungle.", "I built Compass."],
+    lines: ["From Jungle,", "I started Compass."],
     paragraphs: [
-      "I left Jungle Robotics for Compass. Complications with the school system and limited funding made it hard to stay, and for the future of the team it was better to switch.",
-      "I created Compass. We voted on who should be captain, and I won. I am captain and business lead.",
-      "Most of my time is sponsors and fundraising, outreach and partners, and admin: boards and planning.",
+      "Jungle Robotics is where I started. Complications with the school system, and funding that stayed limited, made moving on the better path for the team. Compass was that step.",
+      "I created Compass. Captain was decided by a vote, and I won the election. I serve as captain and business lead.",
+      "The hours go to sponsors and fundraising, to outreach and partners, and to the admin that holds a season together: boards and planning.",
     ],
     stops: [
       {
         name: "Jungle Robotics",
         kind: "Community FRC",
         place: "Pine View School, Osprey",
+        href: "https://junglerobotics3627.gitlab.io/website/",
+        mark: { src: "/media/jungle/mark.svg", width: 500, height: 500 },
       },
       {
         name: "Compass Robotics",
         kind: "Community FRC",
         place: "Sarasota",
         role: "Captain and business lead",
+        href: "https://compass-robotics.com/",
+        mark: { src: "/media/compass/mark.svg", width: 1005.13, height: 1010.7931 },
       },
     ],
     idealsLabel: "Compass holds to",

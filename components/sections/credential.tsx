@@ -21,13 +21,13 @@ const STILL_HD = "/media/cayenne/front2/cayenne-front2-1080p.webp"
  * One pinned gesture, in viewport heights.
  * The clip plays, then the camera is already moving when the light catches the car.
  */
-const TOTAL_VH = 2.65
-const DRIVE_END = 0.62
-const MOVE_START = 0.48
-const WIPE_START = 0.52
-const WIPE_SPAN = 0.09
-const COPY_START = 0.58
-const CREDIT_START = 0.66
+const TOTAL_VH = 2.8
+const DRIVE_END = 0.74
+const MOVE_START = 0.62
+const WIPE_START = 0.74
+const WIPE_SPAN = 0.08
+const COPY_START = 0.78
+const CREDIT_START = 0.84
 
 type Source = { src: string; type: string; media?: string }
 
@@ -77,7 +77,6 @@ function mountSources(video: HTMLVideoElement) {
     if (item.media) source.media = item.media
     video.append(source)
   }
-  video.load()
 }
 
 function clamp01(value: number) {
@@ -169,15 +168,20 @@ export function Credential() {
     let seeking = false
     let seekTimer = 0
 
+    const hold = () => {
+      if (!clip.paused) clip.pause()
+    }
+
     const flushSeek = () => {
       raf = 0
+      hold()
       const duration = clip.duration
-      // Duration arrives with metadata. Waiting for readyState 2 dropped every
-      // seek on phones that won't buffer a hidden clip, so the poster never moved.
       if (!duration || !Number.isFinite(duration)) return
-      const last = Math.max(0, duration - 0.05)
+      const last = Math.max(0, duration - 0.04)
       const next = Math.min(Math.max(0, wantTime), last)
-      if (Math.abs(clip.currentTime - next) < 0.02) return
+      if (Math.abs(clip.currentTime - next) < 0.03) return
+      // One seek at a time. A new currentTime before seeked stacks on a slow
+      // decoder and the picture freezes after the first few frames.
       if (seeking) return
       seeking = true
       window.clearTimeout(seekTimer)
@@ -185,7 +189,7 @@ export function Credential() {
         if (!seeking) return
         seeking = false
         if (!raf) raf = requestAnimationFrame(flushSeek)
-      }, 48)
+      }, 240)
       try {
         clip.currentTime = next
       } catch {
@@ -214,23 +218,7 @@ export function Credential() {
       clip.playsInline = true
       clip.setAttribute("playsinline", "")
       clip.setAttribute("webkit-playsinline", "")
-      const kick = () => {
-        const played = clip.play()
-        if (!played) return
-        played.then(
-          () => {
-            clip.pause()
-            seeking = false
-            if (!raf) raf = requestAnimationFrame(flushSeek)
-          },
-          () => {
-            seeking = false
-            if (!raf) raf = requestAnimationFrame(flushSeek)
-          },
-        )
-      }
-      if (clip.readyState >= 2) kick()
-      else clip.addEventListener("loadeddata", kick, { once: true })
+      hold()
     }
 
     const textNodes = [
@@ -318,6 +306,17 @@ export function Credential() {
 
     mountSources(clip)
     prime()
+    const arm = () => {
+      if (section.getBoundingClientRect().top > window.innerHeight * 1.4) return
+      window.removeEventListener("scroll", arm)
+      if (clip.preload !== "auto") {
+        clip.preload = "auto"
+        clip.load()
+      }
+    }
+    window.addEventListener("scroll", arm, { passive: true })
+    arm()
+    clip.addEventListener("playing", hold)
     clip.addEventListener("seeked", onSeeked)
     const onMediaReady = () => {
       if (!raf) raf = requestAnimationFrame(flushSeek)
@@ -338,6 +337,7 @@ export function Credential() {
     const onChange = () => {
       applyKind(section)
       mountSources(clip)
+      if (clip.preload === "auto") clip.load()
       prime()
       rig = null
       ScrollTrigger.refresh()
@@ -366,6 +366,8 @@ export function Credential() {
     return () => {
       if (raf) cancelAnimationFrame(raf)
       window.clearTimeout(seekTimer)
+      window.removeEventListener("scroll", arm)
+      clip.removeEventListener("playing", hold)
       clip.removeEventListener("seeked", onSeeked)
       clip.removeEventListener("loadedmetadata", onMediaReady)
       clip.removeEventListener("loadeddata", onMediaReady)
@@ -398,7 +400,7 @@ export function Credential() {
                   poster={assetPath(CLIP_POSTER)}
                   muted
                   playsInline
-                  preload="auto"
+                  preload="metadata"
                   disablePictureInPicture
                 />
               </div>

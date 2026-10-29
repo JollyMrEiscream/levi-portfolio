@@ -70,6 +70,7 @@ html.scroll-lock body {
 }
 
 #about,
+#journey,
 #credential,
 #work,
 #skills,
@@ -131,6 +132,11 @@ header.is-scrolled .nav-bar {
 
 html.js:not(.rm) [data-reveal] {
   transform: translate3d(0, 110%, 0);
+}
+
+html.js:not(.rm) .journey-line {
+  transform: scaleY(0);
+  transform-origin: top center;
 }
 
 html.js:not(.rm) .hero-char {

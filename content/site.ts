@@ -3,6 +3,11 @@
  *
  * Project facts come from the code-verified write-up. Do not add claims,
  * store links, or GitHub URLs that are not already in this file.
+ *
+ * The robotics journey is limited to compass-robotics.com: the May 12, 2026
+ * note “Exciting times ahead,” the Sarasota-area robotics page, and the
+ * home and about pages. Do not add a title, years on a team, or a role
+ * until Levi confirms them.
  */
 
 export type ProjectFeature = {
@@ -115,7 +120,7 @@ export const site = {
   emailIsPlaceholder: false,
   copyrightYear: 2026,
   description:
-    "Portfolio of Levi Szantosi, a developer and aspiring game designer in Sarasota, Florida. Studying Japanese, planning language school in Tokyo, and running Clear Web Studio.",
+    "Portfolio of Levi Szantosi, a developer and aspiring game designer in Sarasota, Florida. Studying Japanese, planning language school in Tokyo, running Clear Web Studio, and on the path from Jungle Robotics to Compass Robotics.",
   nav: [
     { label: "Work", href: "/#work" },
     { label: "About", href: "/#about" },
@@ -129,6 +134,7 @@ export const site = {
     "Electron",
     "Japanese",
     "Game design",
+    "Compass Robotics",
   ],
   hero: {
     lede: "From Sarasota. Studying Japanese. Next stop is language school in Tokyo, then game design at a Japanese university.",
@@ -148,6 +154,42 @@ export const site = {
       { label: "Studio", value: "Clear Web Studio" },
       { label: "Next", value: "Language school in Tokyo" },
     ],
+  },
+  /**
+   * Jungle → Compass. No title, years, or role until Levi confirms them.
+   * Team site: https://compass-robotics.com/
+   */
+  journey: {
+    kicker: "Jungle → Compass",
+    lines: ["Out of the jungle.", "Finding the way."],
+    paragraphs: [
+      "The teams on my path are Jungle Robotics, then Compass Robotics. Both are community FRC teams in the Sarasota area.",
+      "Jungle Robotics runs through Pine View School in Osprey. Compass Robotics is in Sarasota: student-led and mentor-guided FIRST robotics.",
+      "On May 12, 2026, in “Exciting times ahead,” Compass wrote that the team ventures out of the jungle, re-forms, and endeavors to find the way. Most members have done FRC before and are up for the challenge. They are starting a new adventure on their own as a “new veteran team.”",
+    ],
+    stops: [
+      {
+        name: "Jungle Robotics",
+        kind: "Community FRC",
+        place: "Pine View School, Osprey",
+      },
+      {
+        name: "Compass Robotics",
+        kind: "Community FRC",
+        place: "Sarasota",
+      },
+    ],
+    idealsLabel: "Compass holds to",
+    ideals: [
+      "Gracious Professionalism",
+      "Iterative learning",
+      "Community",
+      "Custom solutions over kit-bots",
+    ],
+    signoff: "Work Ahoy!",
+    signoffFrom: "Compass Robotics · Exciting times ahead",
+    linkLabel: "compass-robotics.com",
+    href: "https://compass-robotics.com/",
   },
   /**
    * Track credential. Edit the words here.

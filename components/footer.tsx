@@ -20,6 +20,9 @@ export function Footer() {
           <Link href="/#about" data-transition="About" className="hover:text-foreground">
             About
           </Link>
+          <Link href="/#journey" data-transition="Journey" className="hover:text-foreground">
+            Journey
+          </Link>
           <Link href="/#skills" data-transition="Tools" className="hover:text-foreground">
             Tools
           </Link>

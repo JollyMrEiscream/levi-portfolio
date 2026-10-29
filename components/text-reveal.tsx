@@ -37,14 +37,18 @@ export function LineReveal({
       return
     }
 
+    // The CSS hide is translate3d(0, 110%, 0). Name y: 0 so that offset is
+    // replaced, not stacked under yPercent.
     const tween = gsap.fromTo(
       rows,
-      { yPercent: 110 },
+      { yPercent: 110, y: 0 },
       {
         yPercent: 0,
+        y: 0,
         duration: 1.15,
         ease: "power4.out",
         stagger: 0.08,
+        immediateRender: true,
         paused: immediate,
         scrollTrigger: immediate
           ? undefined

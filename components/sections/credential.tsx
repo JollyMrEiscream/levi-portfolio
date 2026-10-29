@@ -31,33 +31,24 @@ const CREDIT_START = 0.66
 
 type Source = { src: string; type: string; media?: string }
 
+/**
+ * H.264 first. The WebM files are larger and their duration isn't in the header,
+ * so a seek before they buffer never paints and the poster stays up.
+ * WebM remains the fallback when H.264 isn't playable.
+ */
 const CLIP_SOURCES: Source[] = [
+  { src: CLIP_PORTRAIT_MP4, type: "video/mp4", media: "(max-aspect-ratio: 1/1)" },
   { src: CLIP_PORTRAIT_WEBM, type: "video/webm", media: "(max-aspect-ratio: 1/1)" },
-  { src: CLIP_PORTRAIT_MP4, type: "video/mp4", media: "(max-aspect-ratio: 1/1)" },
+  { src: CLIP_SMALL_MP4, type: "video/mp4", media: "(max-width: 1023px)" },
   { src: CLIP_SMALL_WEBM, type: "video/webm", media: "(max-width: 1023px)" },
-  { src: CLIP_SMALL_MP4, type: "video/mp4", media: "(max-width: 1023px)" },
+  { src: CLIP_HD_MP4, type: "video/mp4" },
   { src: CLIP_HD_WEBM, type: "video/webm" },
-  { src: CLIP_HD_MP4, type: "video/mp4" },
-]
-
-const H264_SOURCES: Source[] = [
-  { src: CLIP_PORTRAIT_MP4, type: "video/mp4", media: "(max-aspect-ratio: 1/1)" },
-  { src: CLIP_SMALL_MP4, type: "video/mp4", media: "(max-width: 1023px)" },
-  { src: CLIP_HD_MP4, type: "video/mp4" },
 ]
 
 function sourceKind() {
   if (window.innerWidth / window.innerHeight <= 1) return "portrait"
   if (window.matchMedia("(max-width: 1023px)").matches) return "small"
   return "hd"
-}
-
-/** iOS and Safari seek H.264 more reliably than VP9. Other browsers get WebM first. */
-function scrubSources() {
-  const ua = navigator.userAgent
-  const iOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
-  const safari = /Safari/i.test(ua) && !/Chrome|Chromium|Android/i.test(ua)
-  return iOS || safari ? H264_SOURCES : CLIP_SOURCES
 }
 
 function applyKind(section: HTMLElement) {
@@ -74,14 +65,12 @@ function applyKind(section: HTMLElement) {
   section.style.setProperty("--src-w", kind === "small" ? "1280" : "1920")
 }
 
-function mountSources(video: HTMLVideoElement, sources: Source[]) {
+function mountSources(video: HTMLVideoElement) {
   const kind = sourceKind()
-  const codec = sources === H264_SOURCES ? "h264" : "mix"
-  const stamp = `${kind}:${codec}`
-  if (video.dataset.kind === stamp && video.querySelector("source")) return
-  video.dataset.kind = stamp
+  if (video.dataset.kind === kind && video.querySelector("source")) return
+  video.dataset.kind = kind
   video.querySelectorAll("source").forEach((node) => node.remove())
-  for (const item of sources) {
+  for (const item of CLIP_SOURCES) {
     const source = document.createElement("source")
     source.src = assetPath(item.src)
     source.type = item.type
@@ -183,7 +172,9 @@ export function Credential() {
     const flushSeek = () => {
       raf = 0
       const duration = clip.duration
-      if (!duration || !Number.isFinite(duration) || clip.readyState < 2) return
+      // Duration arrives with metadata. Waiting for readyState 2 dropped every
+      // seek on phones that won't buffer a hidden clip, so the poster never moved.
+      if (!duration || !Number.isFinite(duration)) return
       const last = Math.max(0, duration - 0.05)
       const next = Math.min(Math.max(0, wantTime), last)
       if (Math.abs(clip.currentTime - next) < 0.02) return
@@ -229,14 +220,12 @@ export function Credential() {
         played.then(
           () => {
             clip.pause()
-            try {
-              clip.currentTime = 0
-            } catch {
-              /* the first scroll seek will land */
-            }
+            seeking = false
+            if (!raf) raf = requestAnimationFrame(flushSeek)
           },
           () => {
-            /* seeking still runs once a frame is buffered */
+            seeking = false
+            if (!raf) raf = requestAnimationFrame(flushSeek)
           },
         )
       }
@@ -255,6 +244,7 @@ export function Credential() {
       frame.style.boxShadow = ""
       media.style.transform = ""
       still.style.clipPath = ""
+      still.style.opacity = ""
       clip.style.opacity = ""
       sweep.style.opacity = ""
       sweep.style.transform = ""
@@ -282,6 +272,8 @@ export function Credential() {
       const broken = clip.classList.contains("is-broken")
       const reveal = broken || !stillReady ? (broken ? 1 : 0) : wipe
       still.style.clipPath = reveal >= 1 ? "inset(0 0 0 0)" : `inset(0 ${(1 - reveal) * 100}% 0 0)`
+      // Opacity too, so a browser that ignores clip-path on <picture> can't cover the clip with the still.
+      still.style.opacity = reveal > 0 ? "1" : "0"
       clip.style.opacity = broken || reveal >= 0.995 ? "0" : "1"
 
       const sweepOn = !broken && stillReady && sweepT > 0 && sweepT < 1
@@ -324,10 +316,18 @@ export function Credential() {
       credit.style.transform = `translate3d(0, ${((1 - creditShown) * 14).toFixed(2)}px, 0)`
     }
 
-    mountSources(clip, scrubSources())
+    mountSources(clip)
     prime()
     clip.addEventListener("seeked", onSeeked)
+    const onMediaReady = () => {
+      if (!raf) raf = requestAnimationFrame(flushSeek)
+    }
+    clip.addEventListener("loadedmetadata", onMediaReady)
+    clip.addEventListener("loadeddata", onMediaReady)
+    clip.addEventListener("canplay", onMediaReady)
     const onError = () => {
+      // 1 is MEDIA_ERR_ABORTED, which load() raises while swapping sources.
+      if (clip.error && clip.error.code === 1) return
       clip.classList.add("is-broken")
       still.style.opacity = "1"
     }
@@ -337,7 +337,7 @@ export function Credential() {
     const smallQ = window.matchMedia("(max-width: 1023px)")
     const onChange = () => {
       applyKind(section)
-      mountSources(clip, scrubSources())
+      mountSources(clip)
       prime()
       rig = null
       ScrollTrigger.refresh()
@@ -367,6 +367,9 @@ export function Credential() {
       if (raf) cancelAnimationFrame(raf)
       window.clearTimeout(seekTimer)
       clip.removeEventListener("seeked", onSeeked)
+      clip.removeEventListener("loadedmetadata", onMediaReady)
+      clip.removeEventListener("loadeddata", onMediaReady)
+      clip.removeEventListener("canplay", onMediaReady)
       clip.removeEventListener("error", onError)
       portraitQ.removeEventListener("change", onChange)
       smallQ.removeEventListener("change", onChange)

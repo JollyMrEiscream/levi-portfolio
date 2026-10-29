@@ -4,10 +4,9 @@
  * Project facts come from the code-verified write-up. Do not add claims,
  * store links, or GitHub URLs that are not already in this file.
  *
- * The robotics journey is limited to compass-robotics.com: the May 12, 2026
- * note “Exciting times ahead,” the Sarasota-area robotics page, and the
- * home and about pages. Do not add a title, years on a team, or a role
- * until Levi confirms them.
+ * The robotics journey uses Levi's own account of leaving Jungle for Compass,
+ * plus the team pages on compass-robotics.com. He created Compass and is
+ * captain and business lead. Do not add years, awards, or other titles.
  */
 
 export type ProjectFeature = {
@@ -156,16 +155,16 @@ export const site = {
     ],
   },
   /**
-   * Jungle → Compass. No title, years, or role until Levi confirms them.
+   * Jungle → Compass, in Levi's words.
    * Team site: https://compass-robotics.com/
    */
   journey: {
     kicker: "Jungle → Compass",
-    lines: ["Out of the jungle.", "Finding the way."],
+    lines: ["I left Jungle.", "I built Compass."],
     paragraphs: [
-      "The teams on my path are Jungle Robotics, then Compass Robotics. Both are community FRC teams in the Sarasota area.",
-      "Jungle Robotics runs through Pine View School in Osprey. Compass Robotics is in Sarasota: student-led and mentor-guided FIRST robotics.",
-      "On May 12, 2026, in “Exciting times ahead,” Compass wrote that the team ventures out of the jungle, re-forms, and endeavors to find the way. Most members have done FRC before and are up for the challenge. They are starting a new adventure on their own as a “new veteran team.”",
+      "I left Jungle Robotics for Compass. Complications with the school system and limited funding made it hard to stay, and for the future of the team it was better to switch.",
+      "I created Compass. We voted on who should be captain, and I won. I am captain and business lead.",
+      "Most of my time is sponsors and fundraising, outreach and partners, and admin: boards and planning.",
     ],
     stops: [
       {
@@ -177,6 +176,7 @@ export const site = {
         name: "Compass Robotics",
         kind: "Community FRC",
         place: "Sarasota",
+        role: "Captain and business lead",
       },
     ],
     idealsLabel: "Compass holds to",

@@ -3,24 +3,11 @@
 import { useLayoutEffect, useRef } from "react"
 import { site } from "@/content/site"
 import { LineReveal } from "@/components/text-reveal"
+import { assetPath } from "@/lib/base-path"
 import { gsap } from "@/lib/gsap"
 
-function CompassMark() {
-  return (
-    <svg
-      viewBox="0 0 200 200"
-      className="pointer-events-none absolute -right-[6vw] top-8 w-[min(52vw,340px)] text-foreground/[0.14] md:top-16"
-      aria-hidden
-    >
-      <circle cx="100" cy="100" r="78" fill="none" stroke="currentColor" strokeWidth="1" />
-      <circle cx="100" cy="100" r="46" fill="none" stroke="currentColor" strokeWidth="1" />
-      <path d="M100 14v16M100 170v16M14 100h16M170 100h16" fill="none" stroke="currentColor" strokeWidth="1" />
-      <path d="M100 28 112 100 100 172 88 100Z" fill="none" stroke="currentColor" strokeWidth="1" />
-      <path d="M100 28 112 100 100 100Z" fill="currentColor" />
-      <circle cx="100" cy="100" r="3.5" fill="var(--accent)" />
-    </svg>
-  )
-}
+const MARK_W = 1005.13
+const MARK_H = 1010.7931
 
 export function Journey() {
   const routeRef = useRef<HTMLOListElement>(null)
@@ -54,7 +41,6 @@ export function Journey() {
 
   return (
     <section id="journey" className="relative overflow-clip border-t border-line px-safe py-28 md:py-40">
-      <CompassMark />
       <div className="relative">
         <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-faint">{site.journey.kicker}</p>
         <LineReveal
@@ -68,11 +54,28 @@ export function Journey() {
               {site.journey.stops.map((stop, index) => {
                 const last = index === site.journey.stops.length - 1
                 const body = (
-                  <>
-                    <span className="block text-[clamp(1.6rem,3vw,2.4rem)] leading-none tracking-[-0.04em]">{stop.name}</span>
-                    <span className="mt-3 block font-mono text-[11px] uppercase tracking-[0.16em] text-faint">{stop.kind}</span>
-                    <span className="mt-1 block text-sm text-muted">{stop.place}</span>
-                  </>
+                  <span className="flex items-start gap-4">
+                    {last ? (
+                      <img
+                        src={assetPath("/media/compass/mark.svg")}
+                        alt=""
+                        width={MARK_W}
+                        height={MARK_H}
+                        loading="lazy"
+                        decoding="async"
+                        className="mt-0.5 h-16 w-auto max-h-16 shrink-0 opacity-90"
+                        style={{ aspectRatio: `${MARK_W} / ${MARK_H}` }}
+                      />
+                    ) : null}
+                    <span className="min-w-0">
+                      <span className="block text-[clamp(1.6rem,3vw,2.4rem)] leading-none tracking-[-0.04em]">{stop.name}</span>
+                      <span className="mt-3 block font-mono text-[11px] uppercase tracking-[0.16em] text-faint">{stop.kind}</span>
+                      <span className="mt-1 block text-sm text-muted">{stop.place}</span>
+                      {"role" in stop && stop.role ? (
+                        <span className="mt-1 block text-sm text-foreground/80">{stop.role}</span>
+                      ) : null}
+                    </span>
+                  </span>
                 )
                 return (
                   <li key={stop.name} className="relative flex gap-5 pb-12 last:pb-0">

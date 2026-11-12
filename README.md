@@ -30,7 +30,7 @@ npm run build
 
 ## Edit the content
 
-Everything visitors read is in [`content/site.ts`](content/site.ts): name, bio, the Jungle → Compass robotics journey, navigation, marquee, the Atlanta track credential, skills, contact, and the six projects.
+Everything visitors read is in [`content/site.ts`](content/site.ts): name, bio, the Jungle → Compass robotics journey, navigation, marquee, the Atlanta track credential, skills, contact, and the nine projects.
 
 - Set `email` and flip `emailIsPlaceholder` to `false` when the address is real.
 - Fill `year`, `liveUrl`, `repoUrl`, and `stack` on each project. Use `null` or an empty stack until you have them.
@@ -84,7 +84,7 @@ Anywhere else that can serve static files, run `npm run build` with no base path
 The project write-ups follow the code-verified notes. Still open, if you want them public:
 
 - A public store link for DancingSRQ, if you want one on the case study
-- Screen recordings for notch-media and Vela. Those pages use drawn frames until then
+- Screen recordings for notch-media, Notch, Lumenfield, Vela, and Jarvis. Those pages use drawn frames until then
 - Years, and any stack that isn’t already named (Expo for DancingSRQ, Electron for notch-media)
 - Client names and outcomes for Clear Web Studio, if they should be public
 - A fuller story for Vela

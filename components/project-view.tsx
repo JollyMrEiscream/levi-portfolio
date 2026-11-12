@@ -98,7 +98,7 @@ export function ProjectView({
                   </span>
                 ))
               ) : (
-                <span className="text-faint">Add in content/site.ts</span>
+                <span className="text-faint">—</span>
               )}
             </dd>
           </div>

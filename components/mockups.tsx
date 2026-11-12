@@ -11,7 +11,10 @@ export function ProjectMockup({ slug, className }: { slug: string; className?: s
     <div className={className ? `h-full w-full ${className}` : "h-full w-full"}>
       {slug === "dancingsrq" && <DancingMockup />}
       {slug === "notch-media" && <NotchMockup />}
+      {slug === "notch" && <NotchAppMockup />}
+      {slug === "lumenfield" && <LumenfieldMockup />}
       {slug === "vela" && <VelaMockup />}
+      {slug === "jarvis" && <JarvisMockup />}
       {slug === "lockscreen-rotator" && <LockMockup />}
       {slug === "church-bell-tower-watch" && <TowerMockup />}
     </div>
@@ -102,6 +105,203 @@ function Transport() {
         <path d="M1 1l7 5-7 5zM9 1h2v10H9z" />
       </svg>
     </span>
+  )
+}
+
+function NotchAppMockup() {
+  const words = ["keep", "the", "quiet", "near"]
+  const faces = ["Music", "Stats", "Downloads", "Agent"]
+  return (
+    <DeviceStage>
+      <div className="w-full">
+        <div className="rounded-[1.15rem] border border-white/12 bg-[#161616] p-[2.4%] shadow-[0_28px_60px_rgba(0,0,0,0.5)]">
+          <div className="relative overflow-hidden rounded-[0.55rem] bg-[#100e0c]" style={{ aspectRatio: "16 / 10" }}>
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_82%,rgba(255,59,26,0.16),transparent_40%)]" />
+            <div className="absolute inset-x-[7%] top-[24%] bottom-[16%] rounded-md border border-white/10 bg-white/[0.03]" />
+            <div className="absolute left-1/2 top-0 w-[90%] -translate-x-1/2">
+              <div className="mx-auto h-1.5 w-[13%] rounded-b-full bg-black" />
+              <div
+                className="rounded-b-[1.1rem] border border-t-0 border-white/15 bg-white/[0.07] px-[4%] py-[3.2%] shadow-[0_16px_36px_rgba(0,0,0,0.4)]"
+                style={{ containerType: "inline-size" }}
+              >
+                <div className="flex items-center gap-[3%]">
+                  <div
+                    className="aspect-square w-[13%] shrink-0"
+                    style={{ background: "linear-gradient(155deg,#f3f0e8 0 42%,#ff3b1a 42% 58%,#1a1a1a 58%)" }}
+                  />
+                  <div className="min-w-0 flex-1">
+                    <p className="font-mono text-[clamp(7px,1.9cqi,10px)] uppercase tracking-[0.16em] text-white/40">Music</p>
+                    <p className="truncate text-[clamp(11px,3.2cqi,15px)] text-[#f3f0e8]">Paper moon</p>
+                    <p className="truncate text-[clamp(8px,2.2cqi,11px)] text-white/45">Demo track</p>
+                  </div>
+                </div>
+                <p className="mt-[3%] flex flex-wrap gap-x-[0.35em] text-[clamp(8px,2.4cqi,12px)] text-white/35">
+                  {words.map((word, index) => (
+                    <span key={`${word}-${index}`} className={index === 2 ? "lyric-current text-accent" : undefined}>
+                      {word}
+                    </span>
+                  ))}
+                </p>
+                <div className="mt-[3.5%] grid grid-cols-4 gap-[2%]">
+                  {faces.map((face) => (
+                    <span
+                      key={face}
+                      className={
+                        face === "Music"
+                          ? "truncate bg-[#f3f0e8] px-[2%] py-[0.35em] text-center font-mono text-[clamp(6px,1.8cqi,9px)] uppercase tracking-[0.08em] text-[#141210]"
+                          : "truncate border border-white/15 px-[2%] py-[0.35em] text-center font-mono text-[clamp(6px,1.8cqi,9px)] uppercase tracking-[0.08em] text-white/45"
+                      }
+                    >
+                      {face}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="mx-auto h-2.5 w-[15%] bg-[#1c1c1c]" />
+        <div className="mx-auto h-1.5 w-[26%] rounded-b-md bg-[#262626]" />
+      </div>
+    </DeviceStage>
+  )
+}
+
+function LumenfieldMockup() {
+  const uid = useId().replace(/:/g, "")
+  const sky = `${uid}-sky`
+  const water = `${uid}-water`
+  const words = ["soft", "water", "hold"]
+  return (
+    <DeviceStage>
+      <div className="w-full">
+        <div className="rounded-[1.15rem] border border-white/12 bg-[#161616] p-[2.4%] shadow-[0_28px_60px_rgba(0,0,0,0.5)]">
+          <div
+            className="relative overflow-hidden rounded-[0.55rem] bg-[#07110e]"
+            style={{ aspectRatio: "16 / 10", containerType: "inline-size" }}
+          >
+            <svg viewBox="0 0 320 200" className="absolute inset-0 h-full w-full" aria-hidden>
+              <defs>
+                <linearGradient id={sky} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stopColor="#101816" />
+                  <stop offset="0.7" stopColor="#1c2b24" />
+                  <stop offset="1" stopColor="#0c1612" />
+                </linearGradient>
+                <linearGradient id={water} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stopColor="#14302c" />
+                  <stop offset="1" stopColor="#071412" />
+                </linearGradient>
+              </defs>
+              <rect width="320" height="200" fill={`url(#${sky})`} />
+              <circle cx="52" cy="32" r="13" fill="#f3f0e8" opacity="0.9" />
+              <circle cx="58" cy="28" r="11" fill="#1c2b24" />
+              <path d="M0 86 L46 74 L98 90 L150 70 L210 88 L262 74 L320 84 V108 H0 Z" fill="#121c18" />
+              <path d="M16 90 L26 62 L36 90 Z" fill="#1a2820" />
+              <path d="M30 92 L46 52 L62 92 Z" fill="#24362c" />
+              <path d="M52 90 L62 66 L72 90 Z" fill="#18241e" />
+              <rect y="78" width="320" height="122" fill={`url(#${water})`} />
+              <ellipse cx="156" cy="112" rx="70" ry="14" fill="#f3f0e8" opacity="0.06" />
+              <g fill="#e7e1d6">
+                <ellipse cx="124" cy="108" rx="24" ry="8" />
+                <path d="M100 108 L84 98 L86 108 L84 118 Z" />
+                <circle cx="140" cy="106" r="1.2" fill="#141210" />
+              </g>
+              <g>
+                <ellipse cx="206" cy="132" rx="18" ry="6" fill="#ff3b1a" />
+                <path d="M224 132 L238 124 L236 132 L238 140 Z" fill="#ff3b1a" />
+                <circle cx="194" cy="131" r="1" fill="#1a0906" />
+              </g>
+              <ellipse cx="168" cy="112" rx="12" ry="3.4" fill="#1e3a2c" />
+              <g fill="none" stroke="#f3f0e8" strokeOpacity="0.28">
+                <ellipse cx="124" cy="108" rx="38" ry="9" />
+                <ellipse cx="206" cy="132" rx="30" ry="7" />
+              </g>
+              <g stroke="#c4bfb4" strokeOpacity="0.45" strokeWidth="1.1">
+                <path d="M14 108 C16 94 12 84 16 70" />
+                <path d="M22 110 C24 94 20 82 24 66" />
+                <path d="M30 108 C31 96 28 88 32 76" />
+              </g>
+            </svg>
+            <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_36px_rgba(0,0,0,0.35)]" />
+            <p className="absolute left-[5%] top-[7%] font-mono text-[clamp(7px,2cqi,10px)] uppercase tracking-[0.16em] text-accent">
+              Pond
+            </p>
+            <div className="absolute right-[4%] top-[6%] w-[24%] overflow-hidden rounded-[0.2rem] border border-white/15 bg-[#0e1612]">
+              <svg viewBox="0 0 80 48" className="block h-auto w-full" aria-hidden>
+                <rect width="80" height="48" fill="#0e1612" />
+                <path d="M8 40 L22 16 L36 40 Z" fill="#1a2820" />
+                <path d="M24 40 L40 10 L56 40 Z" fill="#24382c" />
+                <path d="M46 40 L60 18 L74 40 Z" fill="#152019" />
+                <path d="M0 40 H80 V48 H0 Z" fill="#101816" />
+              </svg>
+              <p className="px-1 py-0.5 text-center font-mono text-[clamp(6px,1.5cqi,9px)] uppercase tracking-[0.12em] text-white/55">
+                Forest
+              </p>
+            </div>
+            <p className="absolute left-[16%] right-[5%] top-[46%] flex items-end justify-between gap-[4%]">
+              <span className="flex flex-wrap gap-x-[0.35em] text-[clamp(8px,2.5cqi,13px)] text-white/75">
+                {words.map((word, index) => (
+                  <span key={`${word}-${index}`} className={index === 2 ? "lyric-current text-accent" : undefined}>
+                    {word}
+                  </span>
+                ))}
+              </span>
+              <span className="flex h-[1.1em] items-end gap-[0.28em]" aria-hidden>
+                <span className="w-[0.18em] bg-white/40" style={{ height: "45%" }} />
+                <span className="w-[0.18em] bg-accent" style={{ height: "100%" }} />
+                <span className="w-[0.18em] bg-white/35" style={{ height: "68%" }} />
+              </span>
+            </p>
+          </div>
+        </div>
+        <div className="mx-auto h-2.5 w-[15%] bg-[#1c1c1c]" />
+        <div className="mx-auto h-1.5 w-[26%] rounded-b-md bg-[#262626]" />
+      </div>
+    </DeviceStage>
+  )
+}
+
+function JarvisMockup() {
+  const steps = [
+    { label: "See the screen", mark: "done" },
+    { label: "Plan the steps", mark: "now" },
+    { label: "Run the scheduler", mark: "wait" },
+    { label: "Control the PC", mark: "wait" },
+  ]
+  return (
+    <DeviceStage>
+      <div className="w-full overflow-hidden rounded-[0.9rem] border border-white/12 bg-[#101010] shadow-[0_28px_60px_rgba(0,0,0,0.5)]">
+        <div className="flex items-center gap-2 border-b border-white/10 px-3 py-2">
+          <Dots />
+          <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">Jarvis</span>
+          <span className="ml-auto font-mono text-[9px] uppercase tracking-[0.14em] text-white/35">This PC</span>
+        </div>
+        <div className="px-3 py-3">
+          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-accent">Tonight</p>
+          <p className="mt-2 text-[13px] leading-snug tracking-[-0.02em] text-[#f3f0e8]">Dim the monitors after midnight.</p>
+          <ul className="mt-3 space-y-1.5">
+            {steps.map((step) => (
+              <li key={step.label} className="flex items-center gap-2">
+                <span
+                  className={
+                    step.mark === "now"
+                      ? "h-2 w-2 shrink-0 bg-accent"
+                      : step.mark === "done"
+                        ? "h-2 w-2 shrink-0 bg-[#f3f0e8]"
+                        : "h-2 w-2 shrink-0 border border-white/25"
+                  }
+                  aria-hidden
+                />
+                <span className={step.mark === "wait" ? "text-[13px] text-white/40" : "text-[13px] text-[#f3f0e8]"}>
+                  {step.label}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.14em] text-white/40">From Discord</p>
+        </div>
+      </div>
+    </DeviceStage>
   )
 }
 

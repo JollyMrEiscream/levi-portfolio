@@ -237,7 +237,7 @@ export const site = {
   work: {
     index: "02",
     title: "Selected work",
-    lede: "A dance app, desktop tools, a browser, games, and the studio.",
+    lede: "A dance app, desktop tools, a live wallpaper, a browser, games, and the studio.",
   },
   skills: {
     index: "03",
@@ -549,6 +549,78 @@ export const projects: Project[] = [
     liveUrl: null,
     repoUrl: null,
   },
+  /**
+   * Notch and Lumenfield are Levi's descriptions.
+   * No repo or screenshot was available, so the write-ups stay at that scope
+   * and the frames are drawn.
+   */
+  {
+    slug: "notch",
+    title: "Notch",
+    titleLines: ["Notch"],
+    eyebrow: "Desktop",
+    summary:
+      "A Dynamic Island-style notch for Windows, built in Electron. Music with album art and synced lyrics, a PC stats face, a downloads shelf, and Cursor agent activity.",
+    year: null,
+    platform: "Windows",
+    stack: ["Electron"],
+    paragraphs: [
+      "Notch is a Dynamic Island-style notch for Windows, built in Electron. It has a few faces along the top of the screen.",
+      "Music shows album art and lyrics in time with the track. The other faces are PC stats, a downloads shelf, and Cursor agent activity. The frame on this page is drawn. There is no screenshot in the repo.",
+    ],
+    features: [
+      {
+        title: "Music",
+        detail: "Album art and lyrics that stay in time with the track.",
+      },
+      {
+        title: "PC stats",
+        detail: "A face for the PC's live stats.",
+      },
+      {
+        title: "Downloads",
+        detail: "A shelf for downloads.",
+      },
+      {
+        title: "Cursor",
+        detail: "A face for Cursor agent activity.",
+      },
+    ],
+    placeholder: false,
+    liveUrl: null,
+    repoUrl: null,
+  },
+  {
+    slug: "lumenfield",
+    title: "Lumenfield",
+    titleLines: ["Lumenfield"],
+    eyebrow: "Wallpaper",
+    summary: "A minimal, music-reactive live wallpaper for Windows, with synced lyrics and 3D scenes.",
+    year: null,
+    platform: "Windows",
+    stack: [],
+    paragraphs: [
+      "Lumenfield is a minimal live wallpaper for Windows. The picture reacts to the music, and the lyrics stay in sync.",
+      "The scenes are 3D: a koi pond and a forest. The frame on this page is drawn. There is no screenshot in the repo.",
+    ],
+    features: [
+      {
+        title: "Music",
+        detail: "The wallpaper reacts to what's playing.",
+      },
+      {
+        title: "Lyrics",
+        detail: "Lyrics stay in sync on the desktop.",
+      },
+      {
+        title: "Scenes",
+        detail: "3D scenes: a koi pond and a forest.",
+      },
+    ],
+    placeholder: false,
+    liveUrl: null,
+    repoUrl: null,
+  },
   {
     slug: "vela",
     title: "Vela",
@@ -598,6 +670,51 @@ export const projects: Project[] = [
       {
         title: "Tests",
         detail: "Unit tests cover the agent loop, the safety gates, and model parsing.",
+      },
+    ],
+    placeholder: false,
+    liveUrl: null,
+    repoUrl: null,
+  },
+  /**
+   * Jarvis is Levi's description.
+   * No repo or screenshot was available, so the write-up stays at that scope
+   * and the window is drawn.
+   */
+  {
+    slug: "jarvis",
+    title: "Jarvis",
+    titleLines: ["Jarvis"],
+    eyebrow: "Assistant",
+    summary:
+      "A local AI assistant on the home PC, run from Discord. It can see the screen, plan multi-step tasks, run a scheduler, and control the PC.",
+    year: null,
+    platform: "Home PC",
+    stack: [],
+    paragraphs: [
+      "Jarvis is a local AI assistant on Levi's home PC. He runs it from Discord.",
+      "It can see the screen, plan a task across steps, run a scheduler, and control the PC. The window on this page is drawn. There is no screenshot in the repo.",
+    ],
+    features: [
+      {
+        title: "Screen",
+        detail: "It can see the screen.",
+      },
+      {
+        title: "Planning",
+        detail: "It can plan a task as a series of steps.",
+      },
+      {
+        title: "Scheduler",
+        detail: "It runs a scheduler.",
+      },
+      {
+        title: "Control",
+        detail: "It can control the PC.",
+      },
+      {
+        title: "Discord",
+        detail: "Levi runs it from Discord.",
       },
     ],
     placeholder: false,
